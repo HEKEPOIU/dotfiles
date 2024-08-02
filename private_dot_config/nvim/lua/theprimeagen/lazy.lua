@@ -180,10 +180,6 @@ require("lazy").setup({
         config = true
     },
     {
-        'Exafunction/codeium.vim',
-        event = 'BufEnter'
-    },
-    {
         "folke/todo-comments.nvim",
         dependencies = { "nvim-lua/plenary.nvim" },
         opts = {
