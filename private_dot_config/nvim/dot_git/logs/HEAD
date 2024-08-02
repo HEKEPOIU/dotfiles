@@ -1,0 +1,26 @@
+0000000000000000000000000000000000000000 092dc48c9bc7e6ff1597094ce1633682eda893cf HEKEPOIU <decnovpk92805@gmail.com> 1717529095 +0800	commit (initial): Init nvim config
+092dc48c9bc7e6ff1597094ce1633682eda893cf 536d729c979f7ac9b2d1d4e892a40d709ac505ca HEKEPOIU <decnovpk92805@gmail.com> 1717587780 +0800	commit: nvim config init.
+536d729c979f7ac9b2d1d4e892a40d709ac505ca 0000000000000000000000000000000000000000 HEKEPOIU <decnovpk92805@gmail.com> 1717587854 +0800	Branch: renamed refs/heads/master to refs/heads/main
+0000000000000000000000000000000000000000 536d729c979f7ac9b2d1d4e892a40d709ac505ca HEKEPOIU <decnovpk92805@gmail.com> 1717587854 +0800	Branch: renamed refs/heads/master to refs/heads/main
+536d729c979f7ac9b2d1d4e892a40d709ac505ca 536d729c979f7ac9b2d1d4e892a40d709ac505ca HEKEPOIU <decnovpk92805@gmail.com> 1717588148 +0800	checkout: moving from main to connect_ui_and_fix
+536d729c979f7ac9b2d1d4e892a40d709ac505ca 536d729c979f7ac9b2d1d4e892a40d709ac505ca HEKEPOIU <decnovpk92805@gmail.com> 1717589454 +0800	checkout: moving from connect_ui_and_fix to main
+536d729c979f7ac9b2d1d4e892a40d709ac505ca 391a9f27291a9cb794a47c6ae18e7d3572de7a3b HEKEPOIU <decnovpk92805@gmail.com> 1717747976 +0800	commit: Remove GuiCursor, I Don't like it.
+391a9f27291a9cb794a47c6ae18e7d3572de7a3b be2a614ccd15031ffa96ed5a9880b21942397d88 HEKEPOIU <decnovpk92805@gmail.com> 1717749976 +0800	commit: Add Key hint
+be2a614ccd15031ffa96ed5a9880b21942397d88 ef4e8fbc5f6c3eb479b34453ac4b806e2c84d326 HEKEPOIU <decnovpk92805@gmail.com> 1717750061 +0800	commit: Add Key hint
+ef4e8fbc5f6c3eb479b34453ac4b806e2c84d326 43b6bdd11cdb1e92a57dc4dac4f6c85ac27c2952 HEKEPOIU <decnovpk92805@gmail.com> 1717758719 +0800	commit: Remove unneed shell script
+43b6bdd11cdb1e92a57dc4dac4f6c85ac27c2952 300e418d32ab9f2226864af1d5a6f7939301629a HEKEPOIU <decnovpk92805@gmail.com> 1717766144 +0800	commit: Add lsp setting and remap
+300e418d32ab9f2226864af1d5a6f7939301629a 9cdc46a54bb134200c2876f17d81cff5b0862892 HEKEPOIU <decnovpk92805@gmail.com> 1717878201 +0800	commit: Add Sidebar, and barbar plugin.
+9cdc46a54bb134200c2876f17d81cff5b0862892 fbb647be16f43cdfd6fa207280adcd705d2d68c8 HEKEPOIU <decnovpk92805@gmail.com> 1717878505 +0800	commit: Change Sidebar Shortcut.
+fbb647be16f43cdfd6fa207280adcd705d2d68c8 dca9f4a9feac8f2478d497a64af90c174729110f HEKEPOIU <decnovpk92805@gmail.com> 1717880450 +0800	commit: add toggleterm plug
+dca9f4a9feac8f2478d497a64af90c174729110f cf6b90046b94646ebaa53cd449864a36a99b4308 HEKEPOIU <decnovpk92805@gmail.com> 1717880654 +0800	commit: Add Cmake Plug
+cf6b90046b94646ebaa53cd449864a36a99b4308 6539cc9758e4feb5ab36aaba0dedd433c99db45a HEKEPOIU <decnovpk92805@gmail.com> 1717886944 +0800	commit: Change sidebar to nvim-tree
+6539cc9758e4feb5ab36aaba0dedd433c99db45a ced639be37a15b6a35f8ce5582046f8366e45445 HEKEPOIU <decnovpk92805@gmail.com> 1717908418 +0800	commit: Remove Something unneed
+ced639be37a15b6a35f8ce5582046f8366e45445 0986a2954b998127a61d3fe400f00417e717cd8c HEKEPOIU <decnovpk92805@gmail.com> 1718048140 +0800	commit: Add Auto pair, indent blankline rainbow br codeium
+0986a2954b998127a61d3fe400f00417e717cd8c cb3792a1a6f3ea4c66c58994da0c53e9fa94fe12 HEKEPOIU <decnovpk92805@gmail.com> 1718500508 +0800	commit: Save Packer
+cb3792a1a6f3ea4c66c58994da0c53e9fa94fe12 617c8daf5e3686eb35055885ceb6550e26c72179 HEKEPOIU <decnovpk92805@gmail.com> 1718505212 +0800	commit: Change Packer to lazy that i can eazy Connect to vscode
+617c8daf5e3686eb35055885ceb6550e26c72179 5c14998237df8c85dd355c6c3361fd081ea302bb HEKEPOIU <decnovpk92805@gmail.com> 1718761548 +0800	commit: Add trouble pack
+5c14998237df8c85dd355c6c3361fd081ea302bb 841598abc17500879710c80423c65129eb86dfe9 HEKEPOIU <decnovpk92805@gmail.com> 1718849055 +0800	commit: Remove toggleterm
+841598abc17500879710c80423c65129eb86dfe9 d3e50ea1a1706ed88731baeb7158462551074dd7 HEKEPOIU <decnovpk92805@gmail.com> 1719406463 +0800	commit: Add Ts/js Setting
+d3e50ea1a1706ed88731baeb7158462551074dd7 817e4705e8e3c0db5a92f78a439f61e0df32d6d0 HEKEPOIU <decnovpk92805@gmail.com> 1720805505 +0800	commit: Add Lsp setting, and add vue support for ts-tool, and remove vscode support setting for neovim
+817e4705e8e3c0db5a92f78a439f61e0df32d6d0 80a9418dbb776c834d10c38ec94981f2b6bebe0c HEKEPOIU <decnovpk92805@gmail.com> 1720809461 +0800	commit: Chage code action to alt enter
+80a9418dbb776c834d10c38ec94981f2b6bebe0c 7b886409127d5ff313dcaa28322aa512e1e7165d HEKEPOIU <decnovpk92805@gmail.com> 1721236827 +0800	commit: Add dap,cmake-tools,toggleterm,dap-ui,dap for js.
