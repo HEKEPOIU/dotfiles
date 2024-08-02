@@ -5,8 +5,8 @@ end
 
 neofetch
 bass source /etc/profile
-nvm use v20.12.2
-set -gx PATH $HOME/.cargo/bin $PATH
+nvm use lts
+source "$HOME/.cargo/env.fish"
 alias d="kitten diff"
 alias icat="kitten icat"
 export PATH="$HOME/.luaenv/bin:$PATH"
