@@ -130,10 +130,6 @@ require("lazy").setup({
         end,
     },
     {
-        "iamcco/markdown-preview.nvim",
-        build = function() vim.fn["mkdp#util#install"]() end,
-    },
-    {
         "folke/trouble.nvim",
         opts = {}, -- for default options, refer to the configuration section for custom setup.
         cmd = "Trouble",
@@ -153,12 +149,6 @@ require("lazy").setup({
         event = "VeryLazy",
         opts = {},
         config = function(_, opts) require 'lsp_signature'.setup(opts) end
-    },
-    {
-        "iamcco/markdown-preview.nvim",
-        cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-        ft = { "markdown" },
-        build = function() vim.fn["mkdp#util#install"]() end,
     },
     {
         "rcarriga/nvim-dap-ui",
@@ -198,5 +188,17 @@ require("lazy").setup({
         lazy = false, -- or ft = 'typst'
         version = '0.3.*',
         build = function() require 'typst-preview'.update() end,
-    }
+    },
+    {
+        "iamcco/markdown-preview.nvim",
+        cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+        build = "cd app && npm install",
+        init = function()
+            vim.g.mkdp_filetypes = { "markdown" }
+        end,
+        ft = { "markdown" },
+    },
+    {
+        'saadparwaiz1/cmp_luasnip'
+    },
 })
