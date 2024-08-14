@@ -139,7 +139,15 @@ return {
                 end,
             }
         })
-        require('lspconfig').gdscript.setup({})
+        require("lspconfig").clangd.setup {
+            on_attach = on_attach,
+            capabilities = lsp_capabilities,
+            cmd = {
+                "clangd",
+                "--offset-encoding=utf-16",
+            },
+        }
+        require('lspconfig').gdscript.setup(lsp_capabilities)
         vim.api.nvim_create_autocmd("LspAttach", {
             group = vim.api.nvim_create_augroup("lsp", { clear = true }),
             callback = function(args)
