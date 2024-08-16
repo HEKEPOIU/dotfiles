@@ -34,8 +34,9 @@ return {
         local null_ls = require("null-ls")
         null_ls.setup {
             sources = {
-                null_ls.builtins.completion.spell,
                 null_ls.builtins.code_actions.gitsigns,
+                null_ls.builtins.formatting.gdformat,
+                null_ls.builtins.diagnostics.codespell,
                 null_ls.builtins.code_actions.refactoring.with({
                     filetypes = {
                         "go",
@@ -66,7 +67,8 @@ return {
                     },
                     only_local = "node_modules/.bin",
                 }),
-            }
+            },
+            debug = true,
         }
     end
 }
