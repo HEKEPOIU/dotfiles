@@ -106,8 +106,9 @@ return {
                         border = "rounded"
                     },
                     floating_window_off_x = 5,                           -- adjust float windows x position.
-                    floating_window_off_y = function()                   -- adjust float windows y position. e.g. set to -2 can make floating window move up 2 lines
-                        local linenr = vim.api.nvim_win_get_cursor(0)[1] -- buf line number
+                    floating_window_off_y = function()                   -- adjust float windows y position. 
+                                                                         -- e.g. Set to -2 can make floating window move up 2 lines
+                        local linenr = vim.api.nvim_win_get_cursor(0)[1] -- buffer line number
                         local pumheight = vim.o.pumheight
                         local winline = vim.fn.winline()                 -- line number in the window
                         local winheight = vim.fn.winheight(0)
@@ -130,8 +131,6 @@ return {
         --- read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guide/integrate-with-mason-nvim.md
         require('mason').setup({})
         require('mason-lspconfig').setup({
-            ensure_installed = { "codespell" },
-
             handlers = {
                 function(server_name)
                     require('lspconfig')[server_name].setup({
@@ -153,14 +152,14 @@ return {
             group = vim.api.nvim_create_augroup("lsp", { clear = true }),
             callback = function(args)
                 -- 2
-                vim.api.nvim_create_autocmd("BufWritePre", {
-                    -- 3
-                    buffer = args.buf,
-                    callback = function()
-                        -- 4 + 5
-                        vim.lsp.buf.format { async = false, id = args.data.client_id }
-                    end,
-                })
+                -- vim.api.nvim_create_autocmd("BufWritePre", {
+                --     -- 3
+                --     buffer = args.buf,
+                --     callback = function()
+                --         -- 4 + 5
+                --         vim.lsp.buf.format { async = false, id = args.data.client_id }
+                --     end,
+                -- })
             end
         })
 

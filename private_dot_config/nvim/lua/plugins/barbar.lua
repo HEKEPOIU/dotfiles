@@ -48,8 +48,5 @@ return {
         vim.keymap.set('n', '<Space>bw', '<Cmd>BufferOrderByWindowNumber<CR>',
             { desc = "Sort buffers by window number", unpack(opts) })
 
-        -- Additional commands
-        -- :BarbarEnable - enables barbar (enabled by default)
-        -- :BarbarDisable - very bad command, should never be used
     end
 }

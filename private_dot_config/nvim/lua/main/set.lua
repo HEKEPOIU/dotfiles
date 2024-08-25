@@ -27,3 +27,5 @@ vim.opt.isfname:append("@-@")
 vim.opt.updatetime = 50
 
 vim.opt.exrc = true
+vim.opt.spelllang = 'en_us'
+vim.opt.spell = true
