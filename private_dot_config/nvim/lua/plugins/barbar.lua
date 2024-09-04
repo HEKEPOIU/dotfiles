@@ -38,15 +38,18 @@ return {
         vim.keymap.set('n', '<C-p>', '<Cmd>BufferPick<CR>', { desc = "Magic buffer-picking mode", unpack(opts) })
 
         -- Sort buffers by various criteria
-        vim.keymap.set('n', '<Space>bb', '<Cmd>BufferOrderByBufferNumber<CR>',
-            { desc = "Sort buffers by buffer number", unpack(opts) })
-        vim.keymap.set('n', '<Space>bn', '<Cmd>BufferOrderByName<CR>', { desc = "Sort buffers by name", unpack(opts) })
-        vim.keymap.set('n', '<Space>bd', '<Cmd>BufferOrderByDirectory<CR>',
-            { desc = "Sort buffers by directory", unpack(opts) })
-        vim.keymap.set('n', '<Space>bl', '<Cmd>BufferOrderByLanguage<CR>',
-            { desc = "Sort buffers by language", unpack(opts) })
-        vim.keymap.set('n', '<Space>bw', '<Cmd>BufferOrderByWindowNumber<CR>',
-            { desc = "Sort buffers by window number", unpack(opts) })
+        -- vim.keymap.set('n', '<Space>bb', '<Cmd>BufferOrderByBufferNumber<CR>',
+        --     { desc = "Sort buffers by buffer number", unpack(opts) })
+        -- vim.keymap.set('n', '<Space>bn', '<Cmd>BufferOrderByName<CR>', { desc = "Sort buffers by name", unpack(opts) })
+        -- vim.keymap.set('n', '<Space>bd', '<Cmd>BufferOrderByDirectory<CR>',
+        --     { desc = "Sort buffers by directory", unpack(opts) })
+        -- vim.keymap.set('n', '<Space>bl', '<Cmd>BufferOrderByLanguage<CR>',
+        --     { desc = "Sort buffers by language", unpack(opts) })
+        -- vim.keymap.set('n', '<Space>bw', '<Cmd>BufferOrderByWindowNumber<CR>',
+        --     { desc = "Sort buffers by window number", unpack(opts) })
 
+        -- Additional commands
+        -- :BarbarEnable - enables barbar (enabled by default)
+        -- :BarbarDisable - very bad command, should never be used
     end
 }

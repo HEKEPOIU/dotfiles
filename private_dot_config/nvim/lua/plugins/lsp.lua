@@ -63,11 +63,9 @@ return {
                     { desc = "Show hover information", unpack(opts) })
                 vim.keymap.set('n', '<leader>vws', function() vim.lsp.buf.workspace_symbol() end,
                     { desc = "List workspace symbols", unpack(opts) })
-                vim.keymap.set('n', '<leader>vd', function() vim.diagnostic.open_float() end,
-                    { desc = "Open diagnostic float", unpack(opts) })
-                vim.keymap.set('n', '[d', function() vim.diagnostic.goto_next() end,
+                vim.keymap.set('n', ']d', function() vim.diagnostic.goto_next() end,
                     { desc = "Go to next diagnostic", unpack(opts) })
-                vim.keymap.set('n', ']d', function() vim.diagnostic.goto_prev() end,
+                vim.keymap.set('n', '[d', function() vim.diagnostic.goto_prev() end,
                     { desc = "Go to previous diagnostic", unpack(opts) })
                 vim.keymap.set('n', '<M-CR>', function() vim.lsp.buf.code_action() end,
                     { desc = "Show code actions", unpack(opts) })
@@ -106,8 +104,8 @@ return {
                         border = "rounded"
                     },
                     floating_window_off_x = 5,                           -- adjust float windows x position.
-                    floating_window_off_y = function()                   -- adjust float windows y position. 
-                                                                         -- e.g. Set to -2 can make floating window move up 2 lines
+                    floating_window_off_y = function()                   -- adjust float windows y position.
+                        -- e.g. Set to -2 can make floating window move up 2 lines
                         local linenr = vim.api.nvim_win_get_cursor(0)[1] -- buffer line number
                         local pumheight = vim.o.pumheight
                         local winline = vim.fn.winline()                 -- line number in the window
@@ -133,6 +131,9 @@ return {
         require('mason-lspconfig').setup({
             handlers = {
                 function(server_name)
+                    if server_name == "tsserver" then
+                        return
+                    end
                     require('lspconfig')[server_name].setup({
                         capabilities = lsp_capabilities,
                     })

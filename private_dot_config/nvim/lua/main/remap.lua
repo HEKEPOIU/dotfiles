@@ -4,8 +4,6 @@ vim.g.mapleader = " "
 vim.opt.iskeyword:append("_")
 
 
-vim.keymap.set("n", "<leader>pv", vim.cmd.Ex, { desc = "Back To Folder" })
-
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move selected text down" })
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move selected text up" })
 
@@ -36,8 +34,6 @@ vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true, desc =
 
 vim.keymap.set("n", "<leader>ee", "oif err != nil {<CR>}<Esc>Oreturn err<Esc>", { desc = "Insert Go error check snippet" })
 
-vim.keymap.set("n", "<leader>vpp", "<cmd>e ~/.dotfiles/nvim/.config/nvim/lua/theprimeagen/packer.lua<CR>", { desc = "Edit Packer config" })
-vim.keymap.set("n", "<leader>mr", "<cmd>CellularAutomaton make_it_rain<CR>", { desc = "Make it rain" })
 vim.keymap.set("n", "<leader>vv", "<cmd>vsplit<CR>", { desc = "Open vertical split window"})
 vim.keymap.set("n", "<leader>hh", "<cmd>split<CR>", { desc = "Open Horizontal split window"})
 vim.keymap.set("n", "<leader><leader>", function()
