@@ -1,5 +1,6 @@
 return {
     "gelguy/wilder.nvim",
+    enabled = not vim.g.vscode,
     config = function()
         local wilder = require('wilder')
         wilder.setup({ modes = { ':', '/', '?' } })

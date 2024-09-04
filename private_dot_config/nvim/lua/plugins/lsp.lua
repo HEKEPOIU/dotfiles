@@ -1,6 +1,7 @@
 return {
     "VonHeikemen/lsp-zero.nvim",
     branch = "v3.x",
+    enabled = not vim.g.vscode,
     dependencies = {
         { "williamboman/mason.nvim" },
         {

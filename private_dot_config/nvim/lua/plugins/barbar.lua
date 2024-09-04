@@ -4,6 +4,7 @@ return {
         'lewis6991/gitsigns.nvim',     -- OPTIONAL: for git status
         'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
     },
+    enabled = not vim.g.vscode,
     config = function()
         local opts = { noremap = true, silent = true }
 

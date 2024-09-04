@@ -5,6 +5,7 @@ return {
         "mxsdev/nvim-dap-vscode-js",
         "nvim-neotest/nvim-nio",
     },
+    enabled = not vim.g.vscode,
     config = function()
         local dap, dapui = require("dap"), require("dapui")
 

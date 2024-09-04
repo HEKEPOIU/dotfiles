@@ -4,6 +4,7 @@ return {
     ---@module "ibl"
     ---@type ibl.config
     opts = {},
+    enabled = not vim.g.vscode,
     config = function()
         local highlight = {
             "RainbowRed",
