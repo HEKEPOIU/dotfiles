@@ -150,9 +150,6 @@ return {
             },
         }
         require('lspconfig').gdscript.setup(lsp_capabilities)
-        vim.api.nvim_create_autocmd("LspAttach", {
-            group = vim.api.nvim_create_augroup("lsp", { clear = true }),
-        })
 
 
         require('luasnip.loaders.from_vscode').lazy_load()

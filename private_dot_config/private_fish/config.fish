@@ -5,7 +5,7 @@ end
 bass source /etc/profile
 bass source ~/.profile
 bass source ~/.bashrc
-nvm use lts
 neofetch
+nvm use lts
 alias d="kitten diff"
 alias icat="kitten icat"
