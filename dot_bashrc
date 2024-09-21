@@ -1,0 +1,21 @@
+#
+# ~/.bashrc
+#
+
+
+. "$HOME/.cargo/env"
+export PATH="$HOME/.luaenv/bin:$PATH"
+eval "$(luaenv init -)" 
+eval $(opam env)
+EDITOR=nvim
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.cabal/bin:$PATH"
+ghcup="$HOME/.ghcup"
+export PATH="$ghcup/bin:$PATH"
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+PS1='[\u@\h \W]\$ '
+
