@@ -7,6 +7,7 @@ return {
         { "neovim/nvim-lspconfig" },
         { "hrsh7th/nvim-cmp" },
         { "hrsh7th/cmp-nvim-lsp" },
+        { "jay-babu/mason-null-ls.nvim" },
         { "L3MON4D3/LuaSnip" },
         { "williamboman/mason-lspconfig.nvim" },
         { "hrsh7th/cmp-buffer" },
@@ -126,17 +127,32 @@ return {
                         capabilities = lsp_capabilities,
                     })
                 end,
+                clangd = function()
+                    local clangd_cap = lsp_capabilities
+                    clangd_cap.offsetEncoding = { "utf-16" }
+                    require("lspconfig").clangd.setup {
+                        capabilities = clangd_cap,
+                        cmd = {
+                            "clangd",
+                            "--clang-tidy",
+                            "--suggest-missing-includes",
+                            "--cross-file-rename",
+                        },
+                    }
+                end
             }
         })
-        require("lspconfig").clangd.setup {
-            capabilities = lsp_capabilities,
-            cmd = {
-                "clangd",
-                "--offset-encoding=utf-16",
-            },
-        }
         require('lspconfig').gdscript.setup(lsp_capabilities)
 
+        require("mason-null-ls").setup({
+            ensure_installed = {
+                "clang-format",
+                "ocamlformat",
+                "typstfmt",
+            },
+            automatic_installation = true,
+            handlers = {},
+        })
 
         require('luasnip.loaders.from_vscode').lazy_load()
         local lspkind = require('lspkind')

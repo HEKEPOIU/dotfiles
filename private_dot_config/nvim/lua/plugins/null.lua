@@ -36,7 +36,6 @@ return {
         null_ls.setup {
             sources = {
                 null_ls.builtins.code_actions.gitsigns,
-                null_ls.builtins.formatting.gdformat,
                 null_ls.builtins.diagnostics.codespell,
                 null_ls.builtins.code_actions.refactoring.with({
                     filetypes = {
