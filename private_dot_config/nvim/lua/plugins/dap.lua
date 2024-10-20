@@ -4,6 +4,13 @@ return {
         "mfussenegger/nvim-dap",
         "mxsdev/nvim-dap-vscode-js",
         "nvim-neotest/nvim-nio",
+        {
+            "stevearc/overseer.nvim",
+            config = true,
+            opts = {
+                dap = false,
+            }
+        }
     },
     enabled = not vim.g.vscode,
     config = function()

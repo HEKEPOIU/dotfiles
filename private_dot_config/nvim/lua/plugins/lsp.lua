@@ -4,10 +4,6 @@ return {
     enabled = not vim.g.vscode,
     dependencies = {
         { "williamboman/mason.nvim" },
-        {
-            "jay-babu/mason-nvim-dap.nvim",
-            opts = { automatic_installation = false, }
-        },
         { "neovim/nvim-lspconfig" },
         { "hrsh7th/nvim-cmp" },
         { "hrsh7th/cmp-nvim-lsp" },
@@ -34,8 +30,6 @@ return {
         },
     },
     config = function()
-        local lsp_zero = require('lsp-zero')
-        lsp_zero.extend_lspconfig()
         require("typescript-tools").setup {
             filetypes = {
                 "javascript",
@@ -82,13 +76,6 @@ return {
         })
 
         local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
-        local lsp_zero = require('lsp-zero')
-
-        lsp_zero.on_attach(function(client, bufnr)
-            -- see :help lsp-zero-keybindings
-            -- to learn the available actions
-            lsp_zero.default_keymaps({ buffer = bufnr })
-        end)
 
         local signature = require("lsp_signature")
         vim.api.nvim_create_autocmd("LspAttach", {
@@ -128,7 +115,7 @@ return {
         })
         --- if you want to know more about lsp-zero and mason.nvim
         --- read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guide/integrate-with-mason-nvim.md
-        require('mason').setup({})
+        require('mason').setup()
         require('mason-lspconfig').setup({
             handlers = {
                 function(server_name)
@@ -142,7 +129,6 @@ return {
             }
         })
         require("lspconfig").clangd.setup {
-            on_attach = on_attach,
             capabilities = lsp_capabilities,
             cmd = {
                 "clangd",
@@ -155,7 +141,6 @@ return {
         require('luasnip.loaders.from_vscode').lazy_load()
         local lspkind = require('lspkind')
         local cmp = require('cmp')
-        local cmp_action = require('lsp-zero').cmp_action()
         local cmp_select = { behavior = cmp.SelectBehavior.Select }
         cmp.setup({
             sources = {

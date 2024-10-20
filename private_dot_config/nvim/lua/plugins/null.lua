@@ -69,7 +69,7 @@ return {
                     only_local = "node_modules/.bin",
                 }),
             },
-            debug = true,
+            -- debug = true,
         }
     end
 }
