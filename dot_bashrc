@@ -3,6 +3,26 @@
 #
 
 
+open_pdf_in_browser() {
+    if [[ -z "$1" ]]; then
+        echo "please get input file"
+        return 1
+    fi
+    
+    if [[ ! -f "$1" ]]; then
+        echo "file not exist"
+        return 1
+    fi
+
+    if command -v xdg-open > /dev/null; then # for Linux
+        xdg-open "$1" &> /dev/null
+    elif command -v open > /dev/null; then # for Mac
+        open "$1" &> /dev/null
+    else
+        echo "can't find default pdf open app"
+        return 1
+    fi
+}
 . "$HOME/.cargo/env"
 export PATH="$HOME/.luaenv/bin:$PATH"
 eval "$(luaenv init -)" 
@@ -17,5 +37,6 @@ export PATH="$ghcup/bin:$PATH"
 
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
+alias opib='open_pdf_in_browser'
 PS1='[\u@\h \W]\$ '
 
