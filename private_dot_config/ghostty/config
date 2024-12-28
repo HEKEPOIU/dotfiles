@@ -1,6 +1,6 @@
 theme = Galaxy
 shell-integration = fish
-font-family = 0xProto Nerd Mono
+font-family = 0xProto Nerd Font Mono
 font-size = 13
 # The Bug that opacity below 1 with flat tab style will gone
 background-opacity = 1 
@@ -15,6 +15,16 @@ keybind = ctrl+equal=unbind
 keybind = ctrl+minus=unbind
 keybind = ctrl+zero=unbind
 keybind = ctrl+plus=unbind
+
+keybind = alt+one=unbind
+keybind = alt+two=unbind
+keybind = alt+three=unbind
+keybind = alt+four=unbind
+keybind = alt+five=unbind
+keybind = alt+six=unbind
+keybind = alt+seven=unbind
+keybind = alt+eight=unbind
+keybind = alt+nine=unbind
 
 keybind = ctrl+shift+equal=increase_font_size:1
 keybind = ctrl+shift+minus=decrease_font_size:1
