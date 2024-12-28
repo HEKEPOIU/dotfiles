@@ -1,0 +1,28 @@
+theme = Galaxy
+shell-integration = fish
+font-family = 0xProto Nerd Mono
+font-size = 13
+# The Bug that opacity below 1 with flat tab style will gone
+background-opacity = 1 
+fullscreen=true
+command = fish
+keybind = ctrl+shift+l=next_tab
+keybind = ctrl+shift+h=previous_tab
+keybind = ctrl+shift+enter=new_split:right
+keybind = ctrl+shift+y=toggle_quick_terminal
+
+keybind = ctrl+equal=unbind
+keybind = ctrl+minus=unbind
+keybind = ctrl+zero=unbind
+keybind = ctrl+plus=unbind
+
+keybind = ctrl+shift+equal=increase_font_size:1
+keybind = ctrl+shift+minus=decrease_font_size:1
+keybind = ctrl+shift+zero=reset_font_size
+keybind = ctrl+shift+plus=increase_font_size:1
+gtk-tabs-location = bottom
+adw-toolbar-style = raised-border
+gtk-wide-tabs = false
+gtk-adwaita = true
+gtk-titlebar = false
+
