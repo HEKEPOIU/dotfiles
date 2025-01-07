@@ -23,6 +23,20 @@ open_pdf_in_browser() {
         return 1
     fi
 }
+
+fzt() {
+    local p=$(fzf)
+    if [[ -z "$p" ]]; then
+        echo "No selection made"
+        return 1
+    fi
+    
+    local dir=$(dirname "$p")
+    echo $dir
+    cd $dir || { echo "Failed to change directory to $dir"; return 1; }
+}
+
+
 . "$HOME/.cargo/env"
 export PATH="$HOME/.luaenv/bin:$PATH"
 eval "$(luaenv init -)" 
