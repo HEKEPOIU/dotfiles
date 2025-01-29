@@ -3,6 +3,10 @@ return {
     enabled = not vim.g.vscode,
     dependencies = {
         { "williamboman/mason.nvim" },
+        {
+            "stevearc/conform.nvim",
+            opts = {}
+        },
         { "jay-babu/mason-null-ls.nvim" },
         { "L3MON4D3/LuaSnip" },
         { "hrsh7th/nvim-cmp" },
@@ -85,6 +89,35 @@ return {
 
 
         --#region common Lsp shortcut.
+        require("conform").formatters.odinfmt = {
+            inherit = false,
+            command = "odinfmt",
+            args = { "-stdin" },
+            stdin = function()
+                local file_contents = vim.fn.readfile(vim.fn.expand('%'))
+                return table.concat(file_contents, "\n")
+            end,
+        }
+        require("conform").setup({
+            formatters_by_ft = {
+                lua = { lsp_format = "fallback" },
+                cpp = { "clang-format" },
+                rust = { "rustfmt" },
+                javascript = { "prettierd", "prettier", stop_after_first = true },
+                odin = { "odinfmt" },
+                just = { "just" },
+                typst = { "typstfmt" }
+            },
+            default_format_opts = {
+                lsp_format = "fallback",
+            },
+            format_on_save = {
+                -- I recommend these options. See :help conform.format for details.
+                lsp_format = "fallback",
+                timeout_ms = 500,
+            },
+        })
+
         vim.api.nvim_create_autocmd('LspAttach', {
             group = vim.api.nvim_create_augroup('user_lsp_attach', { clear = true }),
             callback = function(event)
@@ -111,6 +144,14 @@ return {
                 vim.keymap.set({ 'n' }, '<Leader>K', function()
                     vim.lsp.buf.signature_help()
                 end, { silent = true, noremap = true, desc = 'toggle signature' })
+                vim.keymap.set("n", "<leader>f", require("conform").format, { desc = "Format buffer" })
+            end,
+        })
+        vim.api.nvim_create_autocmd("BufWritePre", {
+            pattern = "*",
+            callback = function(args)
+                vim.cmd("write")
+                require("conform").format({ bufnr = args.buf })
             end,
         })
         --#endregion
@@ -199,7 +240,7 @@ return {
                     },
                 }
             end,
-            ['bashls'] = function ()
+            ['bashls'] = function()
                 require('lspconfig').bashls.setup({
                     capabilities = lsp_capabilities,
                     filetypes = { "bash", "sh", "just" }
@@ -228,14 +269,7 @@ return {
         local null_ls = require("null-ls")
 
         require("mason-null-ls").setup({
-            ensure_installed = {
-                "clang-format",
-                "typstfmt",
-            },
             automatic_installation = true,
-            handlers = {
-
-            },
         })
 
         null_ls.setup {
@@ -340,7 +374,7 @@ return {
                 end,
             },
             formatting = {
-                fields = {  "abbr","kind", "menu" },
+                fields = { "abbr", "kind", "menu" },
                 format = function(entry, vim_item)
                     local kind = require("lspkind").cmp_format({ mode = "symbol_text", maxwidth = 50 })(entry, vim_item)
                     local strings = vim.split(kind.kind, "%s", { trimempty = true })
