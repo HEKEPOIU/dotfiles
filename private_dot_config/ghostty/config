@@ -1,11 +1,11 @@
 theme = Galaxy
-shell-integration = fish
-font-family = 0xProto Nerd Font Mono
+shell-integration = zsh
+font-family = "0xProto Nerd Font Mono"
 font-size = 13
 # The Bug that opacity below 1 with flat tab style will gone
 background-opacity = 1 
 fullscreen=true
-command = fish
+command = zsh
 keybind = ctrl+shift+l=next_tab
 keybind = ctrl+shift+h=previous_tab
 keybind = ctrl+shift+enter=new_split:right
