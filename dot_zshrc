@@ -63,7 +63,6 @@ eval "$(fzf --zsh)"
 source "$HOME/Utils/sh_utils.sh"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-nvm use 22 --silent
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 alias opib="open_pdf_in_browser"

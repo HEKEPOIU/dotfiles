@@ -1,14 +1,9 @@
 #
 # ~/.bashrc
 #
-
-
-
-
 . "$HOME/Utils/sh_utils.sh"
 . "$HOME/.cargo/env"
 EDITOR=nvim
-export PATH="$HOME/.local/bin:$PATH"
 ghcup="$HOME/.ghcup"
 export PATH="$ghcup/bin:$PATH"
 # If not running interactively, don't do anything
