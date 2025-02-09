@@ -1,13 +1,26 @@
 return {
     "neovim/nvim-lspconfig",
-    enabled = not vim.g.vscode,
     dependencies = {
         { "williamboman/mason.nvim" },
+        { "jay-babu/mason-nvim-dap.nvim" },
+        {
+            "rcarriga/nvim-dap-ui",
+            dependencies = {
+                "mfussenegger/nvim-dap",
+                "nvim-neotest/nvim-nio",
+                {
+                    "stevearc/overseer.nvim",
+                    config = true,
+                    opts = {
+                        dap = false,
+                    }
+                }
+            },
+        },
         {
             "stevearc/conform.nvim",
             opts = {}
         },
-        { "jay-babu/mason-null-ls.nvim" },
         { "L3MON4D3/LuaSnip" },
         { "hrsh7th/nvim-cmp" },
         { "hrsh7th/cmp-nvim-lsp" },
@@ -31,39 +44,6 @@ return {
         },
         {
             "ray-x/lsp_signature.nvim",
-        },
-        {
-            "nvimtools/none-ls.nvim",
-            dependencies = {
-                "nvim-lua/plenary.nvim",
-                {
-                    "ThePrimeagen/refactoring.nvim",
-                    dependencies = {
-                        "nvim-lua/plenary.nvim",
-                        "nvim-treesitter/nvim-treesitter",
-                    },
-                    config = function()
-                        require("refactoring").setup(
-                            {
-                                -- prompt for return type
-                                prompt_func_return_type = {
-                                    go = true,
-                                    cpp = true,
-                                    c = true,
-                                    java = true,
-                                },
-                                -- prompt for function parameters
-                                prompt_func_param_type = {
-                                    go = true,
-                                    cpp = true,
-                                    c = true,
-                                    java = true,
-                                },
-                            }
-                        )
-                    end,
-                },
-            },
         },
     },
     config = function()
@@ -111,12 +91,8 @@ return {
             default_format_opts = {
                 lsp_format = "fallback",
             },
-            format_on_save = {
-                -- I recommend these options. See :help conform.format for details.
-                lsp_format = "fallback",
-                timeout_ms = 500,
-            },
         })
+
 
         vim.api.nvim_create_autocmd('LspAttach', {
             group = vim.api.nvim_create_augroup('user_lsp_attach', { clear = true }),
@@ -147,13 +123,6 @@ return {
                 vim.keymap.set("n", "<leader>f", require("conform").format, { desc = "Format buffer" })
             end,
         })
-        vim.api.nvim_create_autocmd("BufWritePre", {
-            pattern = "*",
-            callback = function(args)
-                vim.cmd("write")
-                require("conform").format({ bufnr = args.buf })
-            end,
-        })
         --#endregion
 
 
@@ -162,22 +131,17 @@ return {
         vim.api.nvim_create_autocmd("LspAttach", {
             callback = function(args)
                 local bufnr = args.buf
-                local client = vim.lsp.get_client_by_id(args.data.client_id)
-                if vim.tbl_contains({ 'null-ls' }, client.name) then -- blacklist lsp
-                    return
-                end
                 signature.on_attach({
                     bind = true, -- This is mandatory, otherwise border config won't get registered.
                     max_height = 3,
                     handler_opts = {
                         border = "rounded"
                     },
-                    floating_window_off_x = 5,                           -- adjust float windows x position.
-                    floating_window_off_y = function()                   -- adjust float windows y position.
+                    floating_window_off_x = 5,         -- adjust float windows x position.
+                    floating_window_off_y = function() -- adjust float windows y position.
                         -- e.g. Set to -2 can make floating window move up 2 lines
-                        local linenr = vim.api.nvim_win_get_cursor(0)[1] -- buffer line number
                         local pumheight = vim.o.pumheight
-                        local winline = vim.fn.winline()                 -- line number in the window
+                        local winline = vim.fn.winline() -- line number in the window
                         local winheight = vim.fn.winheight(0)
 
                         -- window top
@@ -214,7 +178,9 @@ return {
         vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
         vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
 
-        require('mason').setup()
+        require('mason').setup {
+            ensure_installed = { "clangd", "bashls", "neocmake", "lua_ls", "marksman" }
+        }
         require("mason-lspconfig").setup_handlers {
             function(server_name)
                 if server_name == "tsserver" then
@@ -236,6 +202,7 @@ return {
                         "--fallback-style=Google",
                         "--header-insertion=never",
                         "--function-arg-placeholders=false",
+                        "--background-index-priority=normal",
                         "--clang-tidy",
                     },
                 }
@@ -265,52 +232,65 @@ return {
         require('ufo').setup()
         --#endregion
 
-        --#region null_ls setup.
-        local null_ls = require("null-ls")
 
-        require("mason-null-ls").setup({
-            automatic_installation = true,
+        --#region dap
+        require("mason-nvim-dap").setup({
+            ensure_installed = { "codelldb" },
+            handlers = {
+                function(config)
+                    -- all sources with no handler get passed here
+
+                    -- Keep original functionality
+                    require('mason-nvim-dap').default_setup(config)
+                end,
+                codelldb = function(config)
+                    config.configurations =
+                        require("dap.ext.vscode").load_launchjs(nil, {
+                            ["codelldb"] = { "c", "cpp", "rust" },
+                        })
+
+                    require('mason-nvim-dap').default_setup(config)
+                end
+            }
         })
 
-        null_ls.setup {
-            sources = {
-                null_ls.builtins.code_actions.gitsigns,
-                null_ls.builtins.code_actions.refactoring.with({
-                    filetypes = {
-                        "go",
-                        "javascript",
-                        "lua",
-                        "python",
-                        "typescript",
-                        "cpp",
-                        "cs",
-                        "csharp"
-                    }
-                }),
-                null_ls.builtins.formatting.prettierd.with({
-                    filetypes = {
-                        "javascript",
-                        "typescript",
-                        "javascriptreact",
-                        "typescriptreact",
-                        "css",
-                        "scss",
-                        "html",
-                        "json",
-                        "yaml",
-                        "markdown",
-                        "graphql",
-                        "md",
-                        "txt",
-                    },
-                    only_local = "node_modules/.bin",
-                }),
-            },
-            -- debug = true,
+        local dap, dapui = require("dap"), require("dapui")
+
+        dapui.setup()
+
+
+        dap.adapters.godot = {
+            type = "server",
+            host = '127.0.0.1',
+            port = 6006,
         }
 
-        --#endregion
+        dap.configurations.gdscript = {
+            {
+                type = "godot",
+                request = "launch",
+                name = "Launch scene",
+                project = "${workspaceFolder}",
+                launch_scene = true,
+            },
+        }
 
+        vim.api.nvim_set_keymap('n', '<F5>', '<Cmd>lua require"dap".continue()<CR>', { noremap = true, silent = true })
+        vim.api.nvim_set_keymap('n', '<F9>', '<Cmd>lua require"dap".toggle_breakpoint()<CR>',
+            { noremap = true, silent = true })
+        vim.api.nvim_set_keymap('n', '<F10>', '<Cmd>lua require"dap".step_over()<CR>', { noremap = true, silent = true })
+        vim.api.nvim_set_keymap('n', '<F11>', '<Cmd>lua require"dap".step_into()<CR>', { noremap = true, silent = true })
+        vim.api.nvim_set_keymap('n', '<S-F11>', '<Cmd>lua require"dap".step_out()<CR>', { noremap = true, silent = true })
+        vim.api.nvim_set_keymap('n', '<S-F5>', '<Cmd>lua require"dap".terminate()<CR>', { noremap = true, silent = true })
+        vim.api.nvim_set_keymap('n', '<Leader>tf', '<Cmd>lua require("dapui").float_element() <CR>',
+            { noremap = true, silent = true })
+
+        vim.api.nvim_set_keymap('n', '<Leader>tt', '<Cmd>lua require("dapui").toggle() <CR>',
+            { noremap = true, silent = true })
+
+
+        require("overseer").enable_dap()
+        --#endregion
 
         --#region Show error on hold.
         local ns = vim.api.nvim_create_namespace("my_diagnostics_ns")
@@ -348,7 +328,7 @@ return {
         --#endregion Show error on hold.
 
         vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-            border = "rounded", -- 可選值：'none', 'single', 'double', 'rounded', 'solid', 'shadow'
+            border = "rounded",
         })
 
         --#region luasnip setup
@@ -376,7 +356,9 @@ return {
             formatting = {
                 fields = { "abbr", "kind", "menu" },
                 format = function(entry, vim_item)
-                    local kind = require("lspkind").cmp_format({ mode = "symbol_text", maxwidth = 50 })(entry, vim_item)
+                    local kind = lspkind.cmp_format(
+                        { mode = "symbol_text", maxwidth = 50 }
+                    )(entry, vim_item)
                     local strings = vim.split(kind.kind, "%s", { trimempty = true })
                     kind.kind = " " .. (strings[1] or "") .. " "
                     kind.menu = "    " .. (strings[2] or "")

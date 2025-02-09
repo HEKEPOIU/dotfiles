@@ -1,6 +1,5 @@
 return {
     "HiPhish/rainbow-delimiters.nvim",
-    enabled = not vim.g.vscode,
     config = function()
         local rainbow_delimiters = require 'rainbow-delimiters'
         require('rainbow-delimiters.setup').setup {

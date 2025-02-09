@@ -1,6 +1,5 @@
 return {
     "windwp/nvim-ts-autotag",
-    enabled = not vim.g.vscode,
     config = function()
         require('nvim-ts-autotag').setup({
             opts = {

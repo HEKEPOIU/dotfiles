@@ -1,7 +1,6 @@
 return {
     'nvim-lualine/lualine.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons', opts = true },
-    enabled = not vim.g.vscode,
     config = function()
         local colors = {
             blue   = '#80a0ff',

@@ -4,18 +4,14 @@ return {
         'lewis6991/gitsigns.nvim',     -- OPTIONAL: for git status
         'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
     },
-    enabled = not vim.g.vscode,
     config = function()
         local opts = { noremap = true, silent = true }
 
-        -- Move to previous/next buffer
-        vim.keymap.set('n', '<A-,>', '<Cmd>BufferPrevious<CR>', { desc = "Move to previous buffer", unpack(opts) })
-        vim.keymap.set('n', '<A-.>', '<Cmd>BufferNext<CR>', { desc = "Move to next buffer", unpack(opts) })
 
         -- Re-order to previous/next buffer
-        vim.keymap.set('n', '<A-<>', '<Cmd>BufferMovePrevious<CR>',
+        vim.keymap.set('n', '<A-,>', '<Cmd>BufferMovePrevious<CR>',
             { desc = "Move buffer to previous position", unpack(opts) })
-        vim.keymap.set('n', '<A->>', '<Cmd>BufferMoveNext<CR>', { desc = "Move buffer to next position", unpack(opts) })
+        vim.keymap.set('n', '<A-.>', '<Cmd>BufferMoveNext<CR>', { desc = "Move buffer to next position", unpack(opts) })
 
         -- Go to buffer in specific position
         vim.keymap.set('n', '<A-1>', '<Cmd>BufferGoto 1<CR>', { desc = "Go to buffer 1", unpack(opts) })
