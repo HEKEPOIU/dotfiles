@@ -181,31 +181,44 @@ return {
         require('mason').setup {
             ensure_installed = { "clangd", "bashls", "neocmake", "lua_ls", "marksman" }
         }
+        local function get_clangd_cmd()
+            local project_path = vim.fn.getcwd() -- Get the current project directory
+
+            -- Define the paths for Mason and Xcode clangd
+            local mason_clangd = "clangd"
+            local xcode_clangd = "/usr/bin/clangd"
+
+            -- Define project-specific rules
+            if string.match(project_path, ".*XcodeProject.*") then
+                return xcode_clangd
+            else
+                return mason_clangd
+            end
+        end
+
+        local clangd_cap = lsp_capabilities
+        clangd_cap.offsetEncoding = { "utf-16" }
+        require("lspconfig")["clangd"].setup {
+            capabilities = clangd_cap,
+            cmd = {
+                get_clangd_cmd(),
+                "--background-index",
+                "--header-insertion-decorators",
+                "--fallback-style=Google",
+                "--header-insertion=never",
+                "--function-arg-placeholders=false",
+                "--background-index-priority=normal",
+                "--clang-tidy",
+            },
+        }
         require("mason-lspconfig").setup_handlers {
             function(server_name)
-                if server_name == "tsserver" then
+                if server_name == "tsserver" or server_name == "clangd" then
                     return
                 end
                 require('lspconfig')[server_name].setup({
                     capabilities = lsp_capabilities,
                 })
-            end,
-            ["clangd"] = function()
-                local clangd_cap = lsp_capabilities
-                clangd_cap.offsetEncoding = { "utf-16" }
-                require("lspconfig")["clangd"].setup {
-                    capabilities = clangd_cap,
-                    cmd = {
-                        "clangd",
-                        "--background-index",
-                        "--header-insertion-decorators",
-                        "--fallback-style=Google",
-                        "--header-insertion=never",
-                        "--function-arg-placeholders=false",
-                        "--background-index-priority=normal",
-                        "--clang-tidy",
-                    },
-                }
             end,
             ['bashls'] = function()
                 require('lspconfig').bashls.setup({
@@ -248,6 +261,9 @@ return {
                         require("dap.ext.vscode").load_launchjs(nil, {
                             ["codelldb"] = { "c", "cpp", "rust" },
                         })
+                    -- In Some how, apple codelldb will auto add some breakpoint,
+                    -- not sure it came form apple codelldb or something
+                    require("dap").defaults.codelldb.exception_breakpoints = {}
 
                     require('mason-nvim-dap').default_setup(config)
                 end
