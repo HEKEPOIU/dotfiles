@@ -25,6 +25,7 @@ return {
         { "hrsh7th/nvim-cmp" },
         { "hrsh7th/cmp-nvim-lsp" },
         { "hrsh7th/cmp-buffer" },
+        { "hrsh7th/cmp-cmdline" },
         { "hrsh7th/cmp-path" },
         {
             "kevinhwang91/nvim-ufo",
@@ -179,7 +180,9 @@ return {
         vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
 
         require('mason').setup {
-            ensure_installed = { "clangd", "bashls", "neocmake", "lua_ls", "marksman" }
+            registries = {
+                "github:mason-org/mason-registry",
+            },
         }
         local function get_clangd_cmd()
             local project_path = vim.fn.getcwd() -- Get the current project directory
@@ -211,6 +214,9 @@ return {
                 "--clang-tidy",
             },
         }
+        require("mason-lspconfig").setup({
+            ensure_installed = { "clangd", "bashls", "neocmake", "lua_ls", "marksman" },
+        })
         require("mason-lspconfig").setup_handlers {
             function(server_name)
                 if server_name == "tsserver" or server_name == "clangd" then
@@ -409,6 +415,27 @@ return {
                     return kind
                 end,
             },
+        })
+
+        cmp.setup.cmdline('/', {
+            mapping = cmp.mapping.preset.cmdline(),
+            sources = {
+                { name = 'buffer' }
+            }
+        })
+        -- `:` cmdline setup.
+        cmp.setup.cmdline(':', {
+            mapping = cmp.mapping.preset.cmdline(),
+            sources = cmp.config.sources({
+                { name = 'path' }
+            }, {
+                {
+                    name = 'cmdline',
+                    option = {
+                        ignore_cmds = { 'Man', '!' }
+                    }
+                }
+            })
         })
 
         --#endregion

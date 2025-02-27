@@ -28,3 +28,4 @@ vim.opt.updatetime = 50
 vim.opt.exrc = true
 vim.opt.spelllang = 'en_us'
 vim.opt.spell = true
+vim.o.maxmempattern = 8000000
