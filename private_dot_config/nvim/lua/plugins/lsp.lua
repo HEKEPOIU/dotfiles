@@ -432,7 +432,7 @@ return {
                 {
                     name = 'cmdline',
                     option = {
-                        ignore_cmds = { 'Man', '!' }
+                        ignore_cmds = { 'Man', '!', 'grep', 'grepadd', 'vimgrep', "vimgrepadd" }
                     }
                 }
             })
