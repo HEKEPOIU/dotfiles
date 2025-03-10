@@ -392,11 +392,11 @@ return {
                 { name = 'path' },
                 { name = 'buffer',  keyword_length = 3 },
             },
-            mapping = cmp.mapping.preset.insert({
+            mapping = {
                 ['<S-Tab>'] = cmp.mapping.select_prev_item(cmp_select),
                 ['<Tab>'] = cmp.mapping.select_next_item(cmp_select),
                 ['<CR>'] = cmp.mapping.confirm({ select = true }),
-            }),
+            },
             snippet = {
                 expand = function(args)
                     require('luasnip').lsp_expand(args.body)
@@ -417,15 +417,20 @@ return {
             },
         })
 
+        local cmdline_mappings = cmp.mapping.preset.cmdline()
+
+        cmdline_mappings["<C-P>"] = nil
+        cmdline_mappings["<C-N>"] = nil
+
         cmp.setup.cmdline('/', {
-            mapping = cmp.mapping.preset.cmdline(),
+            mapping = cmdline_mappings,
             sources = {
                 { name = 'buffer' }
             }
         })
         -- `:` cmdline setup.
         cmp.setup.cmdline(':', {
-            mapping = cmp.mapping.preset.cmdline(),
+            mapping = cmdline_mappings,
             sources = cmp.config.sources({
                 { name = 'path' }
             }, {
@@ -437,6 +442,8 @@ return {
                 }
             })
         })
+
+
 
         --#endregion
     end
