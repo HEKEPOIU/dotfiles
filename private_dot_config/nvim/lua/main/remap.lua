@@ -1,6 +1,5 @@
 vim.g.mapleader = " "
 
--- 在 init.lua 文件中添加
 vim.opt.iskeyword:append("_")
 
 

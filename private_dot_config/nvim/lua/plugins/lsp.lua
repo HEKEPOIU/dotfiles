@@ -219,7 +219,7 @@ return {
         })
         require("mason-lspconfig").setup_handlers {
             function(server_name)
-                if server_name == "tsserver" or server_name == "clangd" then
+                if server_name == "ts_ls" or server_name == "clangd" then
                     return
                 end
                 require('lspconfig')[server_name].setup({
@@ -396,6 +396,7 @@ return {
                 ['<S-Tab>'] = cmp.mapping.select_prev_item(cmp_select),
                 ['<Tab>'] = cmp.mapping.select_next_item(cmp_select),
                 ['<CR>'] = cmp.mapping.confirm({ select = true }),
+                ['<C-e>'] = cmp.mapping.abort(),
             },
             snippet = {
                 expand = function(args)
