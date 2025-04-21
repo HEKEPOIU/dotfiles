@@ -22,7 +22,9 @@ return {
             opts = {}
         },
         { "L3MON4D3/LuaSnip" },
-        { "hrsh7th/nvim-cmp" },
+        {
+            "hrsh7th/nvim-cmp",
+        },
         { "hrsh7th/cmp-nvim-lsp" },
         { "hrsh7th/cmp-buffer" },
         { "hrsh7th/cmp-cmdline" },
@@ -46,6 +48,14 @@ return {
         {
             "ray-x/lsp_signature.nvim",
         },
+        {
+            "rcarriga/cmp-dap"
+        },
+        {
+            'mrcjkb/rustaceanvim',
+            version = '^6', -- Recommended
+            lazy = false,   -- This plugin is already lazy
+        }
     },
     config = function()
         --#region JS/TS Setup. ---------------------------------------------
@@ -100,13 +110,19 @@ return {
             callback = function(event)
                 local opts = { buffer = event.buf }
 
-                vim.keymap.set('n', 'K', function() vim.lsp.buf.hover() end,
+                vim.keymap.set('n', 'K', function()
+                        vim.lsp.buf.hover(
+                            {
+                                border = "rounded",
+                            }
+                        )
+                    end,
                     { desc = "Show hover information", unpack(opts) })
                 vim.keymap.set('n', '<leader>vws', function() vim.lsp.buf.workspace_symbol() end,
                     { desc = "List workspace symbols", unpack(opts) })
-                vim.keymap.set('n', ']d', function() vim.diagnostic.goto_next() end,
+                vim.keymap.set('n', ']d', function() vim.diagnostic.jump({ count = 1, float = true }) end,
                     { desc = "Go to next diagnostic", unpack(opts) })
-                vim.keymap.set('n', '[d', function() vim.diagnostic.goto_prev() end,
+                vim.keymap.set('n', '[d', function() vim.diagnostic.jump({ count = -1, float = true }) end,
                     { desc = "Go to previous diagnostic", unpack(opts) })
                 vim.keymap.set('n', '<M-CR>', function() vim.lsp.buf.code_action() end,
                     { desc = "Show code actions", unpack(opts) })
@@ -209,11 +225,28 @@ return {
                 "--header-insertion-decorators",
                 "--fallback-style=Google",
                 "--header-insertion=never",
-                "--function-arg-placeholders=false",
                 "--background-index-priority=normal",
+                "--enable-config",
                 "--clang-tidy",
             },
         }
+        vim.g.rustaceanvim = {
+            server = {
+                cmd = function()
+                    local mason_registry = require('mason-registry')
+                    if mason_registry.is_installed('rust-analyzer') then
+                        -- This may need to be tweaked depending on the operating system.
+                        local ra = mason_registry.get_package('rust-analyzer')
+                        local ra_filename = ra:get_receipt():get().links.bin['rust-analyzer']
+                        return { ('%s/%s'):format(ra:get_install_path(), ra_filename or 'rust-analyzer') }
+                    else
+                        -- global installation
+                        return { 'rust-analyzer' }
+                    end
+                end,
+            },
+        }
+
         require("mason-lspconfig").setup({
             ensure_installed = { "clangd", "bashls", "neocmake", "lua_ls", "marksman" },
         })
@@ -258,6 +291,16 @@ return {
                         Lua = {}
                     }
                 })
+            end,
+            ['rust_analyzer'] = function() end,
+            ['zls'] = function ()
+               require('lspconfig').zls.setup({
+                    cmd = {
+                        "zls",
+                        "--config-path",
+                        "~/.config/nvim/lsp_config/zls.json",
+                    }
+               })
             end
         }
 
@@ -290,10 +333,7 @@ return {
                     require('mason-nvim-dap').default_setup(config)
                 end,
                 codelldb = function(config)
-                    config.configurations =
-                        require("dap.ext.vscode").load_launchjs(nil, {
-                            ["codelldb"] = { "c", "cpp", "rust" },
-                        })
+                    config.configurations = {};
                     -- In Some how, apple codelldb will auto add some breakpoint,
                     -- not sure it came form apple codelldb or something
                     require("dap").defaults.codelldb.exception_breakpoints = {}
@@ -376,11 +416,9 @@ return {
         })
         --#endregion Show error on hold.
 
-        vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-            border = "rounded",
-        })
 
         --#region luasnip setup
+        local luasnip = require("luasnip")
         require('luasnip.loaders.from_vscode').lazy_load()
         local lspkind = require('lspkind')
         local cmp = require('cmp')
@@ -393,14 +431,30 @@ return {
                 { name = 'buffer',  keyword_length = 3 },
             },
             mapping = {
-                ['<S-Tab>'] = cmp.mapping.select_prev_item(cmp_select),
-                ['<Tab>'] = cmp.mapping.select_next_item(cmp_select),
+                ['<Tab>'] = cmp.mapping(function(fallback)
+                    if cmp.visible() then
+                        cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+                    elseif luasnip.locally_jumpable(1) then
+                        luasnip.jump(1)
+                    else
+                        fallback()
+                    end
+                end, { "i", "s" }),
+                ["<S-Tab>"] = cmp.mapping(function(fallback)
+                    if cmp.visible() then
+                        cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
+                    elseif luasnip.locally_jumpable(-1) then
+                        luasnip.jump(-1)
+                    else
+                        fallback()
+                    end
+                end, { "i", "s" }),
                 ['<CR>'] = cmp.mapping.confirm({ select = true }),
                 ['<C-e>'] = cmp.mapping.abort(),
             },
             snippet = {
                 expand = function(args)
-                    require('luasnip').lsp_expand(args.body)
+                    luasnip.lsp_expand(args.body)
                 end,
             },
             formatting = {
@@ -416,12 +470,25 @@ return {
                     return kind
                 end,
             },
+            enabled = function()
+                local disabled = false
+                disabled = disabled or (vim.api.nvim_buf_get_option(0, 'buftype') == 'prompt'
+                    and not require("cmp_dap").is_dap_buffer())
+                disabled = disabled or (vim.fn.reg_recording() ~= '')
+                disabled = disabled or (vim.fn.reg_executing() ~= '')
+                return not disabled
+            end,
         })
 
         local cmdline_mappings = cmp.mapping.preset.cmdline()
 
         cmdline_mappings["<C-P>"] = nil
         cmdline_mappings["<C-N>"] = nil
+        require("cmp").setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
+            sources = {
+                { name = "dap", keyword_length = 0 },
+            },
+        })
 
         cmp.setup.cmdline('/', {
             mapping = cmdline_mappings,
