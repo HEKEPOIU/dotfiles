@@ -5,7 +5,7 @@ return {
         vim.g.copilot_no_tab_map = true
 
         -- Set custom mapping for accepting suggestions
-        vim.keymap.set('i', '<C-\\>', 'copilot#Accept("\\<CR>")', {
+        vim.keymap.set('i', '<C-f>', 'copilot#Accept("\\<CR>")', {
             expr = true,
             replace_keycodes = false
         })

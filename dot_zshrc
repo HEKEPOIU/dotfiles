@@ -54,7 +54,6 @@ zstyle :compinstall filename '/home/hekepoiu/.zshrc'
 
 eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
-source "$HOME/Utils/sh_utils.sh"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 
@@ -62,5 +61,5 @@ if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
   eval "$(oh-my-posh init zsh --config "~/.config/zsh_theme/powerlevel10k_rainbow.omp.json")"
 fi
 
-alias opib="open_pdf_in_browser"
 alias ls='ls --color'
+alias cat='bat'

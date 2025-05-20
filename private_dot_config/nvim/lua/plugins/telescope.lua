@@ -1,7 +1,9 @@
 return {
     "nvim-telescope/telescope.nvim",
-    tag = '0.1.8',
-    dependencies = { "nvim-lua/plenary.nvim" },
+    dependencies = {
+        "nvim-lua/plenary.nvim",
+        "nvim-telescope/telescope-ui-select.nvim"
+    },
     config = function()
         local builtin = require('telescope.builtin')
         vim.keymap.set('n', '<leader>pf', builtin.find_files, { desc = "Find Files with Telescope" })
@@ -30,5 +32,40 @@ return {
             { desc = "Goto the definition of the word under the cursor" })
         vim.keymap.set('n', '<leader>ptd', builtin.lsp_type_definitions,
             { desc = "Goto the definition of the type of the word under the cursor" })
+        require('telescope').setup {
+            pickers = {
+                find_files = {
+                    theme = "dropdown",
+                },
+                git_files = {
+                    theme = "dropdown",
+                },
+                live_grep = {
+                    theme = "ivy",
+                },
+                buffers = {
+                    theme = "dropdown",
+                },
+                lsp_references = {
+                    theme = "dropdown",
+                },
+                lsp_document_symbols = {
+                    theme = "dropdown",
+                },
+                lsp_dynamic_workspace_symbols = {
+                    theme = "dropdown",
+                },
+                lsp_implementations = {
+                    theme = "dropdown",
+                },
+                lsp_definitions = {
+                    theme = "dropdown",
+                },
+                lsp_type_definitions = {
+                    theme = "dropdown",
+                },
+            },
+        }
+        require('telescope').load_extension('ui-select')
     end
 }

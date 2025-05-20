@@ -249,59 +249,44 @@ return {
 
         require("mason-lspconfig").setup({
             ensure_installed = { "clangd", "bashls", "neocmake", "lua_ls", "marksman" },
+            automatic_enable = {
+                exclude = { "ts_ls", "clangd", "rust_analyzer" }
+            }
         })
-        require("mason-lspconfig").setup_handlers {
-            function(server_name)
-                if server_name == "ts_ls" or server_name == "clangd" then
-                    return
+        vim.lsp.config.bashls = {
+            filetypes = { "sh", "bash", "zsh" },
+        }
+        vim.lsp.config.lua_ls = {
+            on_init = function(client)
+                if client.workspace_folders then
+                    local path = client.workspace_folders[1].name
+                    if path ~= vim.fn.stdpath('config') and (vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc')) then
+                        return
+                    end
                 end
-                require('lspconfig')[server_name].setup({
-                    capabilities = lsp_capabilities,
-                })
-            end,
-            ['bashls'] = function()
-                require('lspconfig').bashls.setup({
-                    capabilities = lsp_capabilities,
-                    filetypes = { "bash", "sh", "just" }
-                })
-            end,
-            ['lua_ls'] = function()
-                require("lspconfig").lua_ls.setup({
-                    on_init = function(client)
-                        if client.workspace_folders then
-                            local path = client.workspace_folders[1].name
-                            if path ~= vim.fn.stdpath('config') and (vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc')) then
-                                return
-                            end
-                        end
 
-                        client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
-                            runtime = {
-                                version = 'LuaJIT'
-                            },
-                            workspace = {
-                                checkThirdParty = false,
-                                library = {
-                                    vim.env.VIMRUNTIME
-                                }
-                            }
-                        })
-                    end,
-                    settings = {
-                        Lua = {}
+                client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+                    runtime = {
+                        version = 'LuaJIT'
+                    },
+                    workspace = {
+                        checkThirdParty = false,
+                        library = {
+                            vim.env.VIMRUNTIME
+                        }
                     }
                 })
             end,
-            ['rust_analyzer'] = function() end,
-            ['zls'] = function ()
-               require('lspconfig').zls.setup({
-                    cmd = {
-                        "zls",
-                        "--config-path",
-                        "~/.config/nvim/lsp_config/zls.json",
-                    }
-               })
-            end
+            settings = {
+                Lua = {}
+            }
+        }
+        vim.lsp.config.zls = {
+            cmd = {
+                "zls",
+                "--config-path",
+                "~/.config/nvim/lsp_config/zls.json",
+            }
         }
 
         -- temp Solve for rust update interrupted typing.

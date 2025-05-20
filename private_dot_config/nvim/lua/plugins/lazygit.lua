@@ -10,14 +10,10 @@ return {
     },
     dependencies = {
         "nvim-lua/plenary.nvim",         -- required
-        "sindrets/diffview.nvim",        -- optional - Diff integration
-
-        "nvim-telescope/telescope.nvim", -- optional
     },
     keys = {
         { "<leader>g", "<cmd>LazyGit<cr>", desc = "LazyGit" }
     },
     config = function()
-        require('telescope').load_extension('lazygit')
     end
 }
