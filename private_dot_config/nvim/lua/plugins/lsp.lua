@@ -92,12 +92,20 @@ return {
         require("conform").setup({
             formatters_by_ft = {
                 lua = { lsp_format = "fallback" },
-                cpp = { "clang-format" },
+                cpp = { "custom_clang_format" },
                 rust = { "rustfmt" },
                 javascript = { "prettierd", "prettier", stop_after_first = true },
                 odin = { "odinfmt" },
                 just = { "just" },
                 typst = { "typstfmt" }
+            },
+            formatters = {
+                custom_clang_format = {
+                    command = "clang-format",
+                    args = {
+                        "--fallback-style=LLVM",
+                    }
+                },
             },
             default_format_opts = {
                 lsp_format = "fallback",
@@ -215,21 +223,6 @@ return {
             end
         end
 
-        local clangd_cap = lsp_capabilities
-        clangd_cap.offsetEncoding = { "utf-16" }
-        require("lspconfig")["clangd"].setup {
-            capabilities = clangd_cap,
-            cmd = {
-                get_clangd_cmd(),
-                "--background-index",
-                "--header-insertion-decorators",
-                "--fallback-style=Google",
-                "--header-insertion=never",
-                "--background-index-priority=normal",
-                "--enable-config",
-                "--clang-tidy",
-            },
-        }
         vim.g.rustaceanvim = {
             server = {
                 cmd = function()
@@ -250,7 +243,7 @@ return {
         require("mason-lspconfig").setup({
             ensure_installed = { "clangd", "bashls", "neocmake", "lua_ls", "marksman" },
             automatic_enable = {
-                exclude = { "ts_ls", "clangd", "rust_analyzer" }
+                exclude = { "ts_ls", "rust_analyzer" }
             }
         })
         vim.lsp.config.bashls = {
@@ -287,6 +280,21 @@ return {
                 "--config-path",
                 "~/.config/nvim/lsp_config/zls.json",
             }
+        }
+
+        vim.lsp.config.clangd = {
+            capabilities = {
+                offsetEncoding = { "utf-16" },
+            },
+            cmd = {
+                get_clangd_cmd(),
+                "--background-index",
+                "--header-insertion-decorators",
+                "--header-insertion=never",
+                "--background-index-priority=normal",
+                "--enable-config",
+                "--clang-tidy",
+            },
         }
 
         -- temp Solve for rust update interrupted typing.
