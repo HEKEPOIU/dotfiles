@@ -278,7 +278,7 @@ return {
             cmd = {
                 "zls",
                 "--config-path",
-                "~/.config/nvim/lsp_config/zls.json",
+                vim.fn.stdpath('config') .. "/lsp_config/zls.json",
             }
         }
 
@@ -412,7 +412,8 @@ return {
 
         --#region luasnip setup
         local luasnip = require("luasnip")
-        require('luasnip.loaders.from_vscode').lazy_load()
+        require('luasnip.loaders.from_vscode').lazy_load({paths = vim.fn.stdpath('config') .. '/lsp_config/snippets'})
+        require('luasnip.loaders.from_snipmate').lazy_load({paths = vim.fn.stdpath('config') .. '/lsp_config/snippets'})
         local lspkind = require('lspkind')
         local cmp = require('cmp')
         local cmp_select = { behavior = cmp.SelectBehavior.Select }
