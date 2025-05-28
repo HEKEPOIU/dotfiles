@@ -1,18 +1,18 @@
-{{ if ne .chezmoi.os "windows" }}
+{{- if ne .chezmoi.os "windows" }}
 dot_zshrc
 dot_bashrc
 dot_bash_profile
 private_dot_config/delta_theme/
 private_dot_config/ghostty/
 private_dot_config/zsh_theme/
-{{ else }}
+{{- else }}
 readonly_Documents/PowerShell/Microsoft.PowerShell_profile.ps1
-{{ end }}
+{{- end }}
 
-{{ if ne .chezmoi.os "darwin" }}
+{{- if ne .chezmoi.os "darwin" }}
 private_Library/private_Application Support/com.mitchellh.ghostty/config
-{{ end }}
-{{ if ne .chezmoi.os "linux" }}
+{{- end }}
+{{- if ne .chezmoi.os "linux" }}
 private_dot_config/ghostty/config.tmpl
-{{ end }}
+{{- end }}
 
