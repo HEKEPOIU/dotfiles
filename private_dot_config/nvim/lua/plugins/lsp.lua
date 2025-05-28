@@ -116,7 +116,6 @@ return {
         vim.api.nvim_create_autocmd('LspAttach', {
             group = vim.api.nvim_create_augroup('user_lsp_attach', { clear = true }),
             callback = function(event)
-                local opts = { buffer = event.buf }
 
                 vim.keymap.set('n', 'K', function()
                         vim.lsp.buf.hover(
@@ -125,23 +124,23 @@ return {
                             }
                         )
                     end,
-                    { desc = "Show hover information", unpack(opts) })
+                    { desc = "Show hover information", buffer = event.buf })
                 vim.keymap.set('n', '<leader>vws', function() vim.lsp.buf.workspace_symbol() end,
-                    { desc = "List workspace symbols", unpack(opts) })
+                    { desc = "List workspace symbols", buffer = event.buf })
                 vim.keymap.set('n', ']d', function() vim.diagnostic.jump({ count = 1, float = true }) end,
-                    { desc = "Go to next diagnostic", unpack(opts) })
+                    { desc = "Go to next diagnostic", buffer = event.buf })
                 vim.keymap.set('n', '[d', function() vim.diagnostic.jump({ count = -1, float = true }) end,
-                    { desc = "Go to previous diagnostic", unpack(opts) })
+                    { desc = "Go to previous diagnostic", buffer = event.buf })
                 vim.keymap.set('n', '<M-CR>', function() vim.lsp.buf.code_action() end,
-                    { desc = "Show code actions", unpack(opts) })
+                    { desc = "Show code actions", buffer = event.buf })
                 vim.keymap.set('n', '<leader>vrr', function() vim.lsp.buf.references() end,
-                    { desc = "Find references", unpack(opts) })
+                    { desc = "Find references", buffer = event.buf })
                 vim.keymap.set('n', '<leader>vrn', function() vim.lsp.buf.rename() end,
-                    { desc = "Rename symbol", unpack(opts) })
+                    { desc = "Rename symbol", buffer = event.buf })
                 vim.keymap.set('i', '<C-h>', function() vim.lsp.buf.signature_help() end,
-                    { desc = "Show signature help", unpack(opts) })
+                    { desc = "Show signature help", buffer = event.buf })
                 vim.keymap.set("n", "<space>eE", vim.diagnostic.open_float,
-                    { desc = "Show error on cursor", unpack(opts) })
+                    { desc = "Show error on cursor", buffer = event.buf })
                 vim.keymap.set({ 'n' }, '<Leader>K', function()
                     vim.lsp.buf.signature_help()
                 end, { silent = true, noremap = true, desc = 'toggle signature' })

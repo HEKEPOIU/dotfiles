@@ -1,10 +1,12 @@
-{{ if eq .chezmoi.os "windows" }}
+{{ if ne .chezmoi.os "windows" }}
 dot_zshrc
 dot_bashrc
 dot_bash_profile
 private_dot_config/delta_theme/
 private_dot_config/ghostty/
 private_dot_config/zsh_theme/
+{{ else }}
+readonly_Documents/PowerShell/Microsoft.PowerShell_profile.ps1
 {{ end }}
 
 {{ if ne .chezmoi.os "darwin" }}
