@@ -8,13 +8,6 @@ return {
             dependencies = {
                 "mfussenegger/nvim-dap",
                 "nvim-neotest/nvim-nio",
-                {
-                    "stevearc/overseer.nvim",
-                    config = true,
-                    opts = {
-                        dap = false,
-                    }
-                }
             },
         },
         {

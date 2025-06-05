@@ -22,11 +22,33 @@ vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]], { desc = "Delete without yank
 vim.keymap.set("i", "<C-c>", "<Esc>", { desc = "Exit insert mode" })
 
 vim.keymap.set("n", "Q", "<nop>", { desc = "Disable Ex mode" })
-vim.keymap.set("n", "<C-j>", "<cmd>cnext<CR>zz", { desc = "Next item in quickfix list" })
-vim.keymap.set("n", "<C-k>", "<cmd>cprev<CR>zz", { desc = "Previous item in quickfix list" })
+vim.keymap.set("n", "<C-j>", function()
+    local qf_list = vim.fn.getqflist()
+    if #qf_list == 0 then
+        vim.notify("Quickfix list is empty", vim.log.levels.WARN)
+    elseif #qf_list == 1 then
+        vim.cmd("cc 1")
+        vim.cmd("normal! zz")
+    else
+        vim.cmd("try|cnext | catch |endtry")
+        vim.cmd("normal! zz")
+    end
+end, { desc = "Next item in quickfix list" })
+vim.keymap.set("n", "<C-k>", function()
+    local qf_list = vim.fn.getqflist()
+    if #qf_list == 0 then
+        vim.notify("Quickfix list is empty", vim.log.levels.WARN)
+    elseif #qf_list == 1 then
+        vim.cmd("cc 1")
+        vim.cmd("normal! zz")
+    else
+        vim.cmd("try|cprev | catch |endtry")
+        vim.cmd("normal! zz")
+    end
+end, { desc = "Previous item in quickfix list" })
 vim.keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz", { desc = "Next item in location list" })
 vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz", { desc = "Previous item in location list" })
 vim.keymap.set("n", "<leader>cf", "<cmd>let @+ = expand('%:.')<CR>", { desc = "Copy file path to clipboard" })
 
-vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Replace word under cursor" })
-
+vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
+    { desc = "Replace word under cursor" })
