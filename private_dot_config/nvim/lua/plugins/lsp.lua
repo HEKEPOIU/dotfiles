@@ -109,7 +109,6 @@ return {
         vim.api.nvim_create_autocmd('LspAttach', {
             group = vim.api.nvim_create_augroup('user_lsp_attach', { clear = true }),
             callback = function(event)
-
                 vim.keymap.set('n', 'K', function()
                         vim.lsp.buf.hover(
                             {
@@ -404,8 +403,8 @@ return {
 
         --#region luasnip setup
         local luasnip = require("luasnip")
-        require('luasnip.loaders.from_vscode').lazy_load({paths = vim.fn.stdpath('config') .. '/lsp_config/snippets'})
-        require('luasnip.loaders.from_snipmate').lazy_load({paths = vim.fn.stdpath('config') .. '/lsp_config/snippets'})
+        require('luasnip.loaders.from_vscode').lazy_load({ paths = vim.fn.stdpath('config') .. '/lsp_config/snippets' })
+        require('luasnip.loaders.from_snipmate').lazy_load({ paths = vim.fn.stdpath('config') .. '/lsp_config/snippets' })
         local lspkind = require('lspkind')
         local cmp = require('cmp')
         local cmp_select = { behavior = cmp.SelectBehavior.Select }
@@ -496,9 +495,6 @@ return {
                 }
             })
         })
-
-
-
         --#endregion
     end
 }
