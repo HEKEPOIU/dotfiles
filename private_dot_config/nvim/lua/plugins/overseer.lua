@@ -7,7 +7,7 @@ return {
                     direction = "right",
             }
         })
-        vim.keymap.set("n", "<leader>or", ":OverseerRun<CR>")
+        vim.keymap.set("n", "<leader>or", ":OverseerQuickAction open<CR>")
         vim.keymap.set("n", "<leader>ot", ":OverseerToggle<CR>")
     end
 }

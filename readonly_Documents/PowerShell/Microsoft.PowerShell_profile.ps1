@@ -38,9 +38,19 @@ Set-PSReadLineKeyHandler -Chord Ctrl+r -Function ReverseSearchHistory
 Set-PSReadLineOption -PredictionSource HistoryAndPlugin -PredictionViewStyle InlineView
 $env:Path += ";C:\Program Files\LLVM\bin"
 
-#f45873b3-b655-43a6-b217-97c00aa0db58 PowerToys CommandNotFound module
-
-Import-Module -Name Microsoft.WinGet.CommandNotFound
-#f45873b3-b655-43a6-b217-97c00aa0db58
-
 Invoke-Expression (& { (zoxide init --cmd cd powershell | Out-String) })
+
+function vsdev {
+    param(
+        [string]$version = "2022",
+        [string]$arch = "amd64"
+    )
+
+    $vsPath = "C:\Program Files\Microsoft Visual Studio\$version\Community\Common7\Tools\Launch-VsDevShell.ps1"
+
+    if (-Not (Test-Path $vsPath)) {
+        Write-Error "Can't find Visual Studio DevShell Version : $vsPath"
+        return
+    }
+    & $vsPath -Arch $arch
+}
