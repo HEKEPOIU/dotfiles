@@ -90,7 +90,8 @@ return {
                 javascript = { "prettierd", "prettier", stop_after_first = true },
                 odin = { "odinfmt" },
                 just = { "just" },
-                typst = { "typstfmt" }
+                typst = { "typstfmt" },
+                glsl = { "custom_clang_format"}
             },
             formatters = {
                 custom_clang_format = {
