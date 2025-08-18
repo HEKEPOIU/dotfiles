@@ -1,164 +1,164 @@
 {
-    "apps": [
-        {
-            "Name": "7zip",
-            "Info": "",
-            "Version": "25.00",
-            "Updated": "2025-07-13T05:43:43.8929393+08:00",
-            "Source": "main"
-        },
-        {
-            "Name": "chezmoi",
-            "Info": "",
-            "Version": "2.63.0",
-            "Updated": "2025-07-13T06:24:18.6298383+08:00",
-            "Source": "main"
-        },
-        {
-            "Name": "cmake",
-            "Info": "",
-            "Version": "4.0.3",
-            "Updated": "2025-07-13T05:53:18.0225609+08:00",
-            "Source": "main"
-        },
-        {
-            "Name": "fd",
-            "Info": "",
-            "Version": "10.2.0",
-            "Updated": "2025-07-13T06:24:47.9877447+08:00",
-            "Source": "main"
-        },
-        {
-            "Name": "ffmpeg",
-            "Info": "",
-            "Version": "7.1.1",
-            "Updated": "2025-07-13T06:18:47.3424947+08:00",
-            "Source": "main"
-        },
-        {
-            "Name": "fzf",
-            "Info": "",
-            "Version": "0.64.0",
-            "Updated": "2025-07-13T06:25:21.5546364+08:00",
-            "Source": "main"
-        },
-        {
-            "Name": "gh",
-            "Info": "",
-            "Version": "2.75.0",
-            "Updated": "2025-07-13T05:52:00.902338+08:00",
-            "Source": "main"
-        },
-        {
-            "Name": "git",
-            "Info": "",
-            "Version": "2.50.1",
-            "Updated": "2025-07-13T05:43:56.5852014+08:00",
-            "Source": "main"
-        },
-        {
-            "Name": "gsudo",
-            "Info": "",
-            "Version": "2.6.0",
-            "Updated": "2025-07-13T05:46:18.1000282+08:00",
-            "Source": "main"
-        },
-        {
-            "Name": "lazygit",
-            "Info": "",
-            "Version": "0.53.0",
-            "Updated": "2025-07-13T06:27:10.25429+08:00",
-            "Source": "extras"
-        },
-        {
-            "Name": "llvm",
-            "Info": "",
-            "Version": "20.1.8",
-            "Updated": "2025-07-13T05:54:24.6776613+08:00",
-            "Source": "main"
-        },
-        {
-            "Name": "neovim",
-            "Info": "",
-            "Version": "0.11.2",
-            "Updated": "2025-07-13T05:50:30.656171+08:00",
-            "Source": "main"
-        },
-        {
-            "Name": "ninja",
-            "Info": "",
-            "Version": "1.13.1",
-            "Updated": "2025-07-13T05:41:17.02899+08:00",
-            "Source": "main"
-        },
-        {
-            "Name": "nvm",
-            "Info": "",
-            "Version": "1.2.2",
-            "Updated": "2025-07-13T05:42:42.6902884+08:00",
-            "Source": "main"
-        },
-        {
-            "Name": "odin",
-            "Info": "",
-            "Version": "2025-07",
-            "Updated": "2025-07-13T05:38:46.4457482+08:00",
-            "Source": "versions"
-        },
-        {
-            "Name": "oh-my-posh",
-            "Info": "",
-            "Version": "26.14.3",
-            "Updated": "2025-07-13T05:47:56.7717993+08:00",
-            "Source": "main"
-        },
-        {
-            "Name": "ripgrep",
-            "Info": "",
-            "Version": "14.1.1",
-            "Updated": "2025-07-13T06:01:36.920893+08:00",
-            "Source": "main"
-        },
-        {
-            "Name": "vulkan",
-            "Info": "",
-            "Version": "1.4.313.2",
-            "Updated": "2025-07-13T06:22:12.0428612+08:00",
-            "Source": "main"
-        },
-        {
-            "Name": "zig",
-            "Info": "",
-            "Version": "0.14.1",
-            "Updated": "2025-07-13T06:23:58.1676474+08:00",
-            "Source": "main"
-        },
-        {
-            "Name": "zoxide",
-            "Info": "",
-            "Version": "0.9.8",
-            "Updated": "2025-07-13T06:25:55.8366333+08:00",
-            "Source": "main"
-        }
-    ],
     "buckets": [
         {
             "Name": "main",
             "Source": "https://github.com/ScoopInstaller/Main.git",
-            "Updated": "2025-07-13T04:29:01+08:00",
-            "Manifests": 1396
+            "Updated": "2025-08-18T14:09:12+08:00",
+            "Manifests": 1400
         },
         {
             "Name": "extras",
             "Source": "https://github.com/ScoopInstaller/Extras",
-            "Updated": "2025-07-13T04:29:02+08:00",
-            "Manifests": 2169
+            "Updated": "2025-08-18T12:32:08+08:00",
+            "Manifests": 2179
         },
         {
             "Name": "versions",
             "Source": "https://github.com/ScoopInstaller/Versions",
-            "Updated": "2025-07-13T04:38:12+08:00",
+            "Updated": "2025-08-18T12:55:18+08:00",
             "Manifests": 510
+        }
+    ],
+    "apps": [
+        {
+            "Info": "",
+            "Name": "7zip",
+            "Updated": "2025-07-13T05:43:43.8929393+08:00",
+            "Source": "main",
+            "Version": "25.00"
+        },
+        {
+            "Info": "",
+            "Name": "chezmoi",
+            "Updated": "2025-07-13T06:24:18.6298383+08:00",
+            "Source": "main",
+            "Version": "2.63.0"
+        },
+        {
+            "Info": "",
+            "Name": "cmake",
+            "Updated": "2025-07-13T05:53:18.0225609+08:00",
+            "Source": "main",
+            "Version": "4.0.3"
+        },
+        {
+            "Info": "",
+            "Name": "fd",
+            "Updated": "2025-07-13T06:24:47.9877447+08:00",
+            "Source": "main",
+            "Version": "10.2.0"
+        },
+        {
+            "Info": "",
+            "Name": "ffmpeg",
+            "Updated": "2025-07-13T06:18:47.3424947+08:00",
+            "Source": "main",
+            "Version": "7.1.1"
+        },
+        {
+            "Info": "",
+            "Name": "fzf",
+            "Updated": "2025-07-13T06:25:21.5546364+08:00",
+            "Source": "main",
+            "Version": "0.64.0"
+        },
+        {
+            "Info": "",
+            "Name": "gh",
+            "Updated": "2025-07-13T05:52:00.902338+08:00",
+            "Source": "main",
+            "Version": "2.75.0"
+        },
+        {
+            "Info": "",
+            "Name": "git",
+            "Updated": "2025-07-13T05:43:56.5852014+08:00",
+            "Source": "main",
+            "Version": "2.50.1"
+        },
+        {
+            "Info": "",
+            "Name": "gsudo",
+            "Updated": "2025-07-13T05:46:18.1000282+08:00",
+            "Source": "main",
+            "Version": "2.6.0"
+        },
+        {
+            "Info": "",
+            "Name": "lazygit",
+            "Updated": "2025-07-13T06:27:10.25429+08:00",
+            "Source": "extras",
+            "Version": "0.53.0"
+        },
+        {
+            "Info": "",
+            "Name": "llvm",
+            "Updated": "2025-07-13T05:54:24.6776613+08:00",
+            "Source": "main",
+            "Version": "20.1.8"
+        },
+        {
+            "Info": "",
+            "Name": "neovim",
+            "Updated": "2025-07-13T05:50:30.656171+08:00",
+            "Source": "main",
+            "Version": "0.11.2"
+        },
+        {
+            "Info": "",
+            "Name": "ninja",
+            "Updated": "2025-07-13T05:41:17.02899+08:00",
+            "Source": "main",
+            "Version": "1.13.1"
+        },
+        {
+            "Info": "",
+            "Name": "nvm",
+            "Updated": "2025-07-13T05:42:42.6902884+08:00",
+            "Source": "main",
+            "Version": "1.2.2"
+        },
+        {
+            "Info": "",
+            "Name": "odin",
+            "Updated": "2025-08-06T03:33:36.0956329+08:00",
+            "Source": "versions",
+            "Version": "2025-08"
+        },
+        {
+            "Info": "",
+            "Name": "oh-my-posh",
+            "Updated": "2025-07-13T05:47:56.7717993+08:00",
+            "Source": "main",
+            "Version": "26.14.3"
+        },
+        {
+            "Info": "",
+            "Name": "ripgrep",
+            "Updated": "2025-07-13T06:01:36.920893+08:00",
+            "Source": "main",
+            "Version": "14.1.1"
+        },
+        {
+            "Info": "",
+            "Name": "vulkan",
+            "Updated": "2025-07-21T01:19:34.0118625+08:00",
+            "Source": "main",
+            "Version": "1.4.321.1"
+        },
+        {
+            "Info": "",
+            "Name": "zig",
+            "Updated": "2025-07-13T06:23:58.1676474+08:00",
+            "Source": "main",
+            "Version": "0.14.1"
+        },
+        {
+            "Info": "",
+            "Name": "zoxide",
+            "Updated": "2025-07-13T06:25:55.8366333+08:00",
+            "Source": "main",
+            "Version": "0.9.8"
         }
     ]
 }

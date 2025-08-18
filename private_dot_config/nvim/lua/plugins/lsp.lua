@@ -3,6 +3,7 @@ return {
     dependencies = {
         { "williamboman/mason.nvim" },
         { "jay-babu/mason-nvim-dap.nvim" },
+        { "williamboman/mason-lspconfig.nvim" },
         {
             "rcarriga/nvim-dap-ui",
             dependencies = {
@@ -14,35 +15,170 @@ return {
             "stevearc/conform.nvim",
             opts = {}
         },
-        { "L3MON4D3/LuaSnip" },
         {
-            "hrsh7th/nvim-cmp",
+            'saghen/blink.cmp',
+            -- optional: provides snippets for the snippet source
+            dependencies = { 'rafamadriz/friendly-snippets' },
+
+            -- use a release tag to download pre-built binaries
+            version = '1.6.0',
+
+            ---@module 'blink.cmp'
+            ---@type blink.cmp.Config
+            opts = {
+                -- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
+                -- 'super-tab' for mappings similar to vscode (tab to accept)
+                -- 'enter' for enter to accept
+                -- 'none' for no mappings
+                --
+                -- All presets have the following mappings:
+                -- C-space: Open menu or open docs if already open
+                -- C-n/C-p or Up/Down: Select next/previous item
+                -- C-e: Hide menu
+                -- C-k: Toggle signature help (if signature.enabled = true)
+                --
+                -- See :h blink-cmp-config-keymap for defining your own keymap
+                keymap = {
+
+                    ['<Tab>'] = {
+                        function(cmp)
+                            if cmp.snippet_active() then
+                                return cmp.snippet_forward()
+                            else
+                                return cmp.select_next()
+                            end
+                        end,
+                        'fallback'
+                    },
+                    ['<S-Tab>'] = {
+                        function(cmp)
+                            if cmp.snippet_active() then
+                                return cmp.snippet_backward()
+                            else
+                                return cmp.select_prev()
+                            end
+                        end,
+                        'fallback'
+                    },
+                    ['<CR>'] = {
+                        "accept",
+                        "fallback"
+                    },
+                    ['<C-f>'] = { "fallback" }
+
+
+                },
+                cmdline = {
+                    keymap = {
+                        preset = 'cmdline',
+
+                        ['<CR>'] = {
+                            "fallback"
+                        },
+                        ['<Tab>'] = {
+                            "insert_next",
+                            "fallback"
+                        },
+                        ['<S-Tab>'] = {
+                            "insert_prev",
+                            "fallback"
+                        }
+                    },
+                    completion = {
+                        menu = { auto_show = true },
+                        list = {
+                            selection = {
+                                preselect = false, auto_insert = false,
+                            }
+                        }
+                    },
+                },
+
+                appearance = {
+                    -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
+                    -- Adjusts spacing to ensure icons are aligned
+                    nerd_font_variant = 'mono'
+                },
+
+                -- (Default) Only show the documentation popup when manually triggered
+                completion = {
+                    documentation = { auto_show = true, auto_show_delay_ms = 50, },
+                    menu = {
+                        draw = {
+                            columns = { { "label", }, { "kind_icon", "source_name", gap = 1 } },
+
+                        }
+                    },
+                    list = {
+                        selection = {
+                            preselect = true, auto_insert = false,
+                        }
+                    }
+
+                },
+                signature = {
+                    enabled = true,
+                    window = {
+                        border = "rounded",
+                    }
+                },
+
+                -- Default list of enabled providers defined so that you can extend it
+                -- elsewhere in your config, without redefining it, due to `opts_extend`
+                --
+
+                sources = {
+                    default = function(ctx)
+                        local success, node = pcall(vim.treesitter.get_node)
+                        if success and node and vim.tbl_contains({ 'comment', 'line_comment', 'block_comment' }, node:type()) then
+                            return { 'buffer' }
+                        else
+                            return { 'lsp', 'path', 'snippets', 'buffer' }
+                        end
+                    end,
+                },
+                fuzzy = {
+                    sorts = {
+                        'exact',
+
+                        'score', -- Primary sort: by fuzzy matching score
+                        function(a, b)
+                            local source_priority = {
+                                snippets = 4,
+                                lsp = 3,
+                                buffer = 2,
+                                path = 1,
+                            }
+                            local sa = source_priority[a.source_id]
+                            local sb = source_priority[b.source_id]
+                            if sa == nil or sb == nil then
+                                return false
+                            end
+                            return sa > sb
+                        end,
+                        --
+                        -- 'sort_text', -- Secondary sort: by sortText field if scores are equal
+                        -- 'kind',
+                    }
+                },
+                snippets = { preset = 'luasnip' },
+
+            },
+            opts_extend = { "sources.default" }
+
         },
-        { "hrsh7th/cmp-nvim-lsp" },
-        { "hrsh7th/cmp-buffer" },
-        { "hrsh7th/cmp-cmdline" },
-        { "hrsh7th/cmp-path" },
+        { "L3MON4D3/LuaSnip" },
         {
             "kevinhwang91/nvim-ufo",
             dependencies = { "kevinhwang91/promise-async" },
         },
-        {
-            'saadparwaiz1/cmp_luasnip'
-        },
-        { "williamboman/mason-lspconfig.nvim" },
         { "onsails/lspkind.nvim" },
         {
             "pmizio/typescript-tools.nvim",
             dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
         },
         {
-            "rafamadriz/friendly-snippets",
-        },
-        {
             "ray-x/lsp_signature.nvim",
-        },
-        {
-            "rcarriga/cmp-dap"
         },
         {
             'mrcjkb/rustaceanvim',
@@ -52,6 +188,8 @@ return {
     },
     config = function()
         --#region JS/TS Setup. ---------------------------------------------
+
+
 
         require("typescript-tools").setup {
             filetypes = {
@@ -70,6 +208,8 @@ return {
             },
         }
         --#endregion JS/TS Setup. ---------------------------------------------
+
+
 
 
         --#region common Lsp shortcut.
@@ -142,50 +282,6 @@ return {
         })
         --#endregion
 
-
-        --#region Lsp signature popup on typing arg.
-        local signature = require("lsp_signature")
-        vim.api.nvim_create_autocmd("LspAttach", {
-            callback = function(args)
-                local bufnr = args.buf
-                signature.on_attach({
-                    bind = true, -- This is mandatory, otherwise border config won't get registered.
-                    max_height = 3,
-                    handler_opts = {
-                        border = "rounded"
-                    },
-                    floating_window_off_x = 5,         -- adjust float windows x position.
-                    floating_window_off_y = function() -- adjust float windows y position.
-                        -- e.g. Set to -2 can make floating window move up 2 lines
-                        local pumheight = vim.o.pumheight
-                        local winline = vim.fn.winline() -- line number in the window
-                        local winheight = vim.fn.winheight(0)
-
-                        -- window top
-                        if winline - 1 < pumheight then
-                            return pumheight
-                        end
-
-                        -- window bottom
-                        if winheight - winline < pumheight then
-                            return -pumheight
-                        end
-                        return 0
-                    end,
-                }, bufnr)
-            end,
-        })
-        --#endregion
-
-        --#region Lsp server setup and fold provider setup.
-        local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
-
-        lsp_capabilities.textDocument.foldingRange = {
-            dynamicRegistration = false,
-            lineFoldingOnly = true
-        }
-        -- ufo Config use to fold code.
-
         vim.o.foldcolumn = '1' -- '0' is not bad
         vim.o.foldlevel = 99   -- Using ufo provider need a large value, feel free to decrease the value
         vim.o.foldlevelstart = 99
@@ -200,6 +296,7 @@ return {
                 "github:mason-org/mason-registry",
             },
         }
+
         local function get_clangd_cmd()
             local project_path = vim.fn.getcwd() -- Get the current project directory
 
@@ -275,9 +372,9 @@ return {
         }
 
         vim.lsp.config.clangd = {
-            capabilities = {
+            capabilities = require('blink.cmp').get_lsp_capabilities({
                 offsetEncoding = { "utf-16" },
-            },
+            }),
             cmd = {
                 get_clangd_cmd(),
                 "--background-index",
@@ -287,6 +384,16 @@ return {
                 "--enable-config",
                 "--clang-tidy",
             },
+        }
+        root = ""
+        vim.lsp.config.ols = {
+            root_dir = function(bufnr, on_dir)
+                local fname = vim.api.nvim_buf_get_name(bufnr)
+                if root == "" then
+                    root = require('lspconfig.util').root_pattern('ols.json', '.git')(fname)
+                end
+                on_dir(root)
+            end,
         }
 
         -- temp Solve for rust update interrupted typing.
@@ -300,7 +407,7 @@ return {
                 return default_diagnostic_handler(err, result, context, config)
             end
         end
-        require('lspconfig').gdscript.setup(lsp_capabilities)
+        -- require('lspconfig').gdscript.setup(lsp_capabilities)
 
 
         require('ufo').setup()
@@ -403,99 +510,7 @@ return {
 
 
         --#region luasnip setup
-        local luasnip = require("luasnip")
         require('luasnip.loaders.from_vscode').lazy_load({ paths = vim.fn.stdpath('config') .. '/lsp_config/snippets' })
         require('luasnip.loaders.from_snipmate').lazy_load({ paths = vim.fn.stdpath('config') .. '/lsp_config/snippets' })
-        local lspkind = require('lspkind')
-        local cmp = require('cmp')
-        local cmp_select = { behavior = cmp.SelectBehavior.Select }
-        cmp.setup({
-            sources = {
-                { name = 'nvim_lsp' },
-                { name = 'luasnip', keyword_length = 2 },
-                { name = 'path' },
-                { name = 'buffer',  keyword_length = 3 },
-            },
-            mapping = {
-                ['<Tab>'] = cmp.mapping(function(fallback)
-                    if cmp.visible() then
-                        cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
-                    elseif luasnip.locally_jumpable(1) then
-                        luasnip.jump(1)
-                    else
-                        fallback()
-                    end
-                end, { "i", "s" }),
-                ["<S-Tab>"] = cmp.mapping(function(fallback)
-                    if cmp.visible() then
-                        cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
-                    elseif luasnip.locally_jumpable(-1) then
-                        luasnip.jump(-1)
-                    else
-                        fallback()
-                    end
-                end, { "i", "s" }),
-                ['<CR>'] = cmp.mapping.confirm({ select = true }),
-                ['<C-e>'] = cmp.mapping.abort(),
-            },
-            snippet = {
-                expand = function(args)
-                    luasnip.lsp_expand(args.body)
-                end,
-            },
-            formatting = {
-                fields = { "abbr", "kind", "menu" },
-                format = function(entry, vim_item)
-                    local kind = lspkind.cmp_format(
-                        { mode = "symbol_text", maxwidth = 50 }
-                    )(entry, vim_item)
-                    local strings = vim.split(kind.kind, "%s", { trimempty = true })
-                    kind.kind = " " .. (strings[1] or "") .. " "
-                    kind.menu = "    " .. (strings[2] or "")
-
-                    return kind
-                end,
-            },
-            enabled = function()
-                local disabled = false
-                disabled = disabled or (vim.api.nvim_buf_get_option(0, 'buftype') == 'prompt'
-                    and not require("cmp_dap").is_dap_buffer())
-                disabled = disabled or (vim.fn.reg_recording() ~= '')
-                disabled = disabled or (vim.fn.reg_executing() ~= '')
-                return not disabled
-            end,
-        })
-
-        local cmdline_mappings = cmp.mapping.preset.cmdline()
-
-        cmdline_mappings["<C-P>"] = nil
-        cmdline_mappings["<C-N>"] = nil
-        require("cmp").setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
-            sources = {
-                { name = "dap", keyword_length = 0 },
-            },
-        })
-
-        cmp.setup.cmdline('/', {
-            mapping = cmdline_mappings,
-            sources = {
-                { name = 'buffer' }
-            }
-        })
-        -- `:` cmdline setup.
-        cmp.setup.cmdline(':', {
-            mapping = cmdline_mappings,
-            sources = cmp.config.sources({
-                { name = 'path' }
-            }, {
-                {
-                    name = 'cmdline',
-                    option = {
-                        ignore_cmds = { 'Man', '!', 'grep', 'grepadd', 'vimgrep', "vimgrepadd" }
-                    }
-                }
-            })
-        })
-        --#endregion
     end
 }
