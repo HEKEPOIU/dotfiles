@@ -172,18 +172,12 @@ return {
             "kevinhwang91/nvim-ufo",
             dependencies = { "kevinhwang91/promise-async" },
         },
-        { "onsails/lspkind.nvim" },
         {
             "pmizio/typescript-tools.nvim",
             dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
         },
         {
             "ray-x/lsp_signature.nvim",
-        },
-        {
-            'mrcjkb/rustaceanvim',
-            version = '^6', -- Recommended
-            lazy = false,   -- This plugin is already lazy
         }
     },
     config = function()
@@ -226,7 +220,6 @@ return {
             formatters_by_ft = {
                 lua = { lsp_format = "fallback" },
                 cpp = { "custom_clang_format" },
-                rust = { "rustfmt" },
                 javascript = { "prettierd", "prettier", stop_after_first = true },
                 odin = { "odinfmt" },
                 just = { "just" },
@@ -312,27 +305,10 @@ return {
             end
         end
 
-        vim.g.rustaceanvim = {
-            server = {
-                cmd = function()
-                    local mason_registry = require('mason-registry')
-                    if mason_registry.is_installed('rust-analyzer') then
-                        -- This may need to be tweaked depending on the operating system.
-                        local ra = mason_registry.get_package('rust-analyzer')
-                        local ra_filename = ra:get_receipt():get().links.bin['rust-analyzer']
-                        return { ('%s/%s'):format(ra:get_install_path(), ra_filename or 'rust-analyzer') }
-                    else
-                        -- global installation
-                        return { 'rust-analyzer' }
-                    end
-                end,
-            },
-        }
-
         require("mason-lspconfig").setup({
             ensure_installed = { "clangd", "bashls", "neocmake", "lua_ls", "marksman" },
             automatic_enable = {
-                exclude = { "ts_ls", "rust_analyzer" }
+                exclude = { "ts_ls" }
             }
         })
         vim.lsp.config.bashls = {
@@ -396,17 +372,6 @@ return {
             end,
         }
 
-        -- temp Solve for rust update interrupted typing.
-        -- https://github.com/neovim/neovim/issues/30985
-        for _, method in ipairs({ 'textDocument/diagnostic', 'workspace/diagnostic' }) do
-            local default_diagnostic_handler = vim.lsp.handlers[method]
-            vim.lsp.handlers[method] = function(err, result, context, config)
-                if err ~= nil and err.code == -32802 then
-                    return
-                end
-                return default_diagnostic_handler(err, result, context, config)
-            end
-        end
         -- require('lspconfig').gdscript.setup(lsp_capabilities)
 
 
