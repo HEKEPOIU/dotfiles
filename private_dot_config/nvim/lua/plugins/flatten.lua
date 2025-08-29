@@ -17,6 +17,9 @@ return {
           focus = openHandler.stdin_buf
         end
         local winnr = vim.fn.win_getid(1, 1)
+
+        local delete_winnr = vim.fn.win_getid(vim.fn.winnr('$'), 1)
+        vim.api.nvim_win_close(delete_winnr, true)
         vim.api.nvim_win_set_buf(winnr, focus.bufnr)
         vim.api.nvim_set_current_win(winnr)
 
