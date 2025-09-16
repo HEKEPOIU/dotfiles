@@ -35,7 +35,6 @@ keybind = ctrl+shift+plus=increase_font_size:1
 gtk-tabs-location = bottom
 adw-toolbar-style = raised-border
 gtk-wide-tabs = false
-gtk-adwaita = true
 gtk-titlebar = false
 
 
