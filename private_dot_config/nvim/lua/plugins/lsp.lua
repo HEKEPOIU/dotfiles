@@ -220,7 +220,10 @@ return {
             formatters_by_ft = {
                 lua = { lsp_format = "fallback" },
                 cpp = { "custom_clang_format" },
-                javascript = { "prettierd", "prettier", stop_after_first = true },
+                javascript = { "prettier", stop_after_first = true },
+                typescript = { "prettier", stop_after_first = true },
+                typescriptreact = { "prettier", stop_after_first = true },
+                javascriptreact = { "prettier", stop_after_first = true },
                 odin = { "odinfmt" },
                 just = { "just" },
                 typst = { "typstfmt" },
