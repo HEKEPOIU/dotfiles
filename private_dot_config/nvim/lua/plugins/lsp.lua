@@ -227,7 +227,7 @@ return {
                 odin = { "odinfmt" },
                 just = { "just" },
                 typst = { "typstfmt" },
-                glsl = { "custom_clang_format"}
+                glsl = { "custom_clang_format" }
             },
             formatters = {
                 custom_clang_format = {
@@ -375,6 +375,24 @@ return {
             end,
         }
 
+        vim.filetype.add({
+            extension = {
+                hlsl = "hlsl",
+            }
+        })
+        if jit.os == "Windows" then
+            vim.lsp.config.shader_language_server = {
+                cmd = {
+                    vim.fn.stdpath('config') .. '/lsp_config/shader_lsp/shader-language-server.exe',
+                },
+                filetypes = { "glsl", "hlsl", "glslv", "glslf", "shader", "vert", "frag", "vs", "fs", "vert.glsl", "frag.glsl" },
+
+            }
+
+            vim.lsp.enable({
+                "shader_language_server",
+            })
+        end
         -- require('lspconfig').gdscript.setup(lsp_capabilities)
 
 
