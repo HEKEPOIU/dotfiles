@@ -6,8 +6,8 @@ font-size = 13
 background-opacity = 1 
 fullscreen=true
 command = zsh
-keybind = ctrl+shift+l=next_tab
-keybind = ctrl+shift+h=previous_tab
+keybind = ctrl+shift+l=goto_split:right
+keybind = ctrl+shift+h=goto_split:left
 keybind = ctrl+shift+enter=new_split:right
 keybind = ctrl+shift+y=toggle_quick_terminal
 
