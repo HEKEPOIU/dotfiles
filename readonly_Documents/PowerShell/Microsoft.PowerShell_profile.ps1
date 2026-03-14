@@ -1,4 +1,4 @@
-oh-my-posh init pwsh --config ~/.config/myposhtheme/powerlevel10k_rainbow.omp.json | Invoke-Expression
+oh-my-posh init pwsh --config ~/.config/sh_theme/spacesip.omp.json | Invoke-Expression
 Import-Module -Name Terminal-Icons
 Remove-PSReadLineKeyHandler -Chord *
 

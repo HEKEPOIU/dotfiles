@@ -1,4 +1,4 @@
-
+export PATH="$HOME/.local/bin:$PATH"
  if [[ -f "/opt/homebrew/bin/brew" ]] then
   # If you're using macOS, you'll want this enabled
   eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -58,8 +58,11 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 
 if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
-  eval "$(oh-my-posh init zsh --config "~/.config/zsh_theme/powerlevel10k_rainbow.omp.json")"
+  eval "$(oh-my-posh init zsh --config "~/.config/zsh_theme/spacesip.omp.json")"
 fi
 
 alias ls='ls --color'
 alias cat='bat'
+export EDITOR=nvim
+eval "$(mise activate zsh)"
+eval "$(tv init zsh)"
