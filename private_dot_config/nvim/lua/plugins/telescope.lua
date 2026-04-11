@@ -44,6 +44,8 @@ return {
             { desc = "Go to definition" })
 
 
+
+
         vim.keymap.set('n', '<leader>pd', builtin.lsp_definitions,
             { desc = "Goto the definition of the word under the cursor" })
         require('telescope').setup {
@@ -91,7 +93,7 @@ return {
                     -- the default case_mode is "smart_case"
                 },
                 live_grep_args = {
-                    mappings = {       -- extend mappings
+                    mappings = { -- extend mappings
                         i = {
                             ["<C-k>"] = require("telescope-live-grep-args.actions").quote_prompt(),
                         },

@@ -220,13 +220,7 @@ return {
             formatters_by_ft = {
                 lua = { lsp_format = "fallback" },
                 cpp = { "custom_clang_format" },
-                javascript = { "prettier", stop_after_first = true },
-                typescript = { "prettier", stop_after_first = true },
-                typescriptreact = { "prettier", stop_after_first = true },
-                javascriptreact = { "prettier", stop_after_first = true },
                 odin = { "odinfmt" },
-                just = { "just" },
-                typst = { "typstfmt" },
                 glsl = { "custom_clang_format" }
             },
             formatters = {
@@ -364,7 +358,7 @@ return {
                 "--clang-tidy",
             },
         }
-        root = ""
+        local root = ""
         vim.lsp.config.ols = {
             root_dir = function(bufnr, on_dir)
                 local fname = vim.api.nvim_buf_get_name(bufnr)
@@ -455,8 +449,6 @@ return {
         vim.api.nvim_set_keymap('n', '<Leader>tt', '<Cmd>lua require("dapui").toggle() <CR>',
             { noremap = true, silent = true })
 
-
-        require("overseer").enable_dap()
         --#endregion
 
         --#region Show error on hold.

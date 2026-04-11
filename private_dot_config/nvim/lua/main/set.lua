@@ -34,5 +34,13 @@ vim.opt.updatetime = 50
 vim.opt.exrc = true
 vim.opt.spelllang = 'en_us'
 vim.opt.spell = true
+
+vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#A5475a", bg = "NONE" })
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = { "compilation" },
+    callback = function()
+        vim.opt_local.spell = false
+    end,
+})
 vim.opt.splitright = true
 vim.o.maxmempattern = 8000000

@@ -17,5 +17,6 @@ return {
         vim.keymap.set("n", "<leader>g", function()
             Snacks.lazygit.open()
         end, { desc = "Lazygit" })
+        require("snacks").setup()
     end,
 }
