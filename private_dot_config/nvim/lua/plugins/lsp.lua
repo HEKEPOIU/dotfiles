@@ -303,13 +303,19 @@ return {
         end
 
         require("mason-lspconfig").setup({
-            ensure_installed = { "clangd", "bashls", "neocmake", "lua_ls", "marksman" },
+            ensure_installed = { "clangd", "bashls", "neocmake", "lua_ls", "marksman", "typos_lsp", "harper_ls" },
             automatic_enable = {
                 exclude = { "ts_ls" }
             }
         })
         vim.lsp.config.bashls = {
             filetypes = { "sh", "bash", "zsh" },
+        }
+        vim.lsp.config.harper_ls = {
+            linters = {
+                SentenceCapitalization = false,
+                SpellCheck = false
+            }
         }
         vim.lsp.config.lua_ls = {
             on_init = function(client)

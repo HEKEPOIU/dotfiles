@@ -69,10 +69,10 @@ local modes = {
     ["no"] = "NORMAL",
     ["v"] = "VISUAL",
     ["V"] = "VISUAL LINE",
-    [" "] = "VISUAL BLOCK",
+    ["\22"] = "VISUAL BLOCK",
     ["s"] = "SELECT",
     ["S"] = "SELECT LINE",
-    [" "] = "SELECT BLOCK",
+    ["\19"] = "SELECT BLOCK",
     ["i"] = "INSERT",
     ["ic"] = "INSERT",
     ["R"] = "REPLACE",
@@ -88,8 +88,9 @@ local modes = {
 }
 local function mode()
     local current_mode = vim.api.nvim_get_mode().mode
-    return string.format(" %s ", modes[current_mode]):upper()
+    return string.format(" %s ", modes[current_mode] or current_mode):upper()
 end
+
 local function filetype()
     return string.format(" %s ", vim.bo.filetype)
 end
@@ -160,14 +161,3 @@ vim.api.nvim_create_autocmd({ "WinLeave", "BufLeave" }, {
         vim.opt_local.statusline = "%!v:lua.Statusline.inactive()"
     end,
 })
--- vim.opt.fillchars = {
---     vert      = "│",
---     horiz     = "─",
---     horizup   = "┴",
---     horizdown = "┬",
---     vertleft  = "┤",
---     vertright = "├",
---     verthoriz = "┼",
--- }
-
-vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#A5475a", bg = "NONE" })
