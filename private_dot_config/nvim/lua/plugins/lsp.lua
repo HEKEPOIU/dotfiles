@@ -3,10 +3,7 @@ return {
     dependencies = {
         { "williamboman/mason.nvim" },
         { "williamboman/mason-lspconfig.nvim" },
-        {
-            "stevearc/conform.nvim",
-            opts = {}
-        },
+        {"stevearc/conform.nvim",},
         {
             'saghen/blink.cmp',
             -- optional: provides snippets for the snippet source
@@ -168,15 +165,9 @@ return {
             "pmizio/typescript-tools.nvim",
             dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
         },
-        {
-            "ray-x/lsp_signature.nvim",
-        }
     },
     config = function()
         --#region JS/TS Setup. ---------------------------------------------
-
-
-
         require("typescript-tools").setup {
             filetypes = {
                 "javascript",
@@ -252,13 +243,8 @@ return {
                     { desc = "Find references", buffer = event.buf })
                 vim.keymap.set('n', '<leader>vrn', function() vim.lsp.buf.rename() end,
                     { desc = "Rename symbol", buffer = event.buf })
-                vim.keymap.set('i', '<C-h>', function() vim.lsp.buf.signature_help() end,
-                    { desc = "Show signature help", buffer = event.buf })
                 vim.keymap.set("n", "<space>eE", vim.diagnostic.open_float,
                     { desc = "Show error on cursor", buffer = event.buf })
-                vim.keymap.set({ 'n' }, '<Leader>K', function()
-                    vim.lsp.buf.signature_help()
-                end, { silent = true, noremap = true, desc = 'toggle signature' })
                 vim.keymap.set("n", "<leader>f", require("conform").format, { desc = "Format buffer" })
             end,
         })
@@ -268,10 +254,6 @@ return {
         vim.o.foldlevel = 99   -- Using ufo provider need a large value, feel free to decrease the value
         vim.o.foldlevelstart = 99
         vim.o.foldenable = true
-
-        -- Using ufo provider need remap `zR` and `zM`. If Neovim is 0.6.1, remap yourself
-        vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
-        vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
 
         require('mason').setup {
             registries = {
@@ -295,7 +277,7 @@ return {
         end
 
         require("mason-lspconfig").setup({
-            ensure_installed = { "clangd", "bashls", "neocmake", "lua_ls", "marksman", "typos_lsp", "harper_ls" },
+            ensure_installed = { "clangd", "bashls", "neocmake", "lua_ls", "marksman", "typos_lsp", "harper_ls", "jsonls", "mesonlsp", "ts_ls"},
             automatic_enable = {
                 exclude = { "ts_ls" }
             }
@@ -332,13 +314,6 @@ return {
             end,
             settings = {
                 Lua = {}
-            }
-        }
-        vim.lsp.config.zls = {
-            cmd = {
-                "zls",
-                "--config-path",
-                vim.fn.stdpath('config') .. "/lsp_config/zls.json",
             }
         }
 
@@ -385,51 +360,11 @@ return {
                 "shader_language_server",
             })
         end
-        -- require('lspconfig').gdscript.setup(lsp_capabilities)
 
 
         require('ufo').setup()
         --#endregion
 
-
-
-
-
-
-        --#region Show error on hold.
-        local ns = vim.api.nvim_create_namespace("my_diagnostics_ns")
-
-        vim.diagnostic.config({
-            virtual_text = false,
-            underline = true,
-        })
-
-        vim.api.nvim_create_autocmd("CursorHold", {
-            callback = function()
-                local bufnr = vim.api.nvim_get_current_buf()
-                local cursor = vim.api.nvim_win_get_cursor(0)
-                local lnum = cursor[1] - 1
-                local diagnostics = vim.diagnostic.get(bufnr, { lnum = lnum })
-
-
-                if #diagnostics > 0 then
-                    vim.diagnostic.show(ns, bufnr, diagnostics, {
-                        virtual_text = true,
-                    })
-                end
-            end,
-        })
-
-        vim.api.nvim_create_autocmd("CursorMoved", {
-            callback = function()
-                vim.diagnostic.hide(ns)
-                vim.diagnostic.config({
-                    virtual_text = false,
-                    underline = true,
-                })
-            end,
-        })
-        --#endregion Show error on hold.
 
 
         --#region luasnip setup

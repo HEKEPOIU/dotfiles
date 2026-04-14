@@ -40,3 +40,38 @@ vim.api.nvim_create_autocmd("FileType", {
 		vim.opt_local.formatoptions:remove({ "c", "r", "o" })
 	end,
 })
+
+--#region Show error on hold.
+local ns = vim.api.nvim_create_namespace("my_diagnostics_ns")
+
+vim.diagnostic.config({
+	virtual_text = false,
+	underline = true,
+})
+
+vim.api.nvim_create_autocmd("CursorHold", {
+	callback = function()
+		local bufnr = vim.api.nvim_get_current_buf()
+		local cursor = vim.api.nvim_win_get_cursor(0)
+		local lnum = cursor[1] - 1
+		local diagnostics = vim.diagnostic.get(bufnr, { lnum = lnum })
+
+
+		if #diagnostics > 0 then
+			vim.diagnostic.show(ns, bufnr, diagnostics, {
+				virtual_text = true,
+			})
+		end
+	end,
+})
+
+vim.api.nvim_create_autocmd("CursorMoved", {
+	callback = function()
+		vim.diagnostic.hide(ns)
+		vim.diagnostic.config({
+			virtual_text = false,
+			underline = true,
+		})
+	end,
+})
+--#endregion Show error on hold.
