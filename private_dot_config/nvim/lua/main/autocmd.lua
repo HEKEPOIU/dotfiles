@@ -75,3 +75,23 @@ vim.api.nvim_create_autocmd("CursorMoved", {
 	end,
 })
 --#endregion Show error on hold.
+
+
+
+require("main.stateline")
+
+local statusline_group = vim.api.nvim_create_augroup("Statusline", { clear = true })
+
+vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter" }, {
+    group = statusline_group,
+    callback = function()
+        vim.opt_local.statusline = "%!v:lua.Statusline.active()"
+    end,
+})
+
+vim.api.nvim_create_autocmd({ "WinLeave", "BufLeave" }, {
+    group = statusline_group,
+    callback = function()
+        vim.opt_local.statusline = "%!v:lua.Statusline.inactive()"
+    end,
+})
