@@ -2,15 +2,7 @@ return {
     "neovim/nvim-lspconfig",
     dependencies = {
         { "williamboman/mason.nvim" },
-        { "jay-babu/mason-nvim-dap.nvim" },
         { "williamboman/mason-lspconfig.nvim" },
-        {
-            "rcarriga/nvim-dap-ui",
-            dependencies = {
-                "mfussenegger/nvim-dap",
-                "nvim-neotest/nvim-nio",
-            },
-        },
         {
             "stevearc/conform.nvim",
             opts = {}
@@ -400,62 +392,9 @@ return {
         --#endregion
 
 
-        --#region dap
-        require("mason-nvim-dap").setup({
-            ensure_installed = { "codelldb" },
-            handlers = {
-                function(config)
-                    -- all sources with no handler get passed here
-
-                    -- Keep original functionality
-                    require('mason-nvim-dap').default_setup(config)
-                end,
-                codelldb = function(config)
-                    config.configurations = {};
-                    -- In Some how, apple codelldb will auto add some breakpoint,
-                    -- not sure it came form apple codelldb or something
-                    require("dap").defaults.codelldb.exception_breakpoints = {}
-
-                    require('mason-nvim-dap').default_setup(config)
-                end
-            }
-        })
-
-        local dap, dapui = require("dap"), require("dapui")
-
-        dapui.setup()
 
 
-        dap.adapters.godot = {
-            type = "server",
-            host = '127.0.0.1',
-            port = 6006,
-        }
 
-        dap.configurations.gdscript = {
-            {
-                type = "godot",
-                request = "launch",
-                name = "Launch scene",
-                project = "${workspaceFolder}",
-                launch_scene = true,
-            },
-        }
-
-        vim.api.nvim_set_keymap('n', '<F5>', '<Cmd>lua require"dap".continue()<CR>', { noremap = true, silent = true })
-        vim.api.nvim_set_keymap('n', '<F9>', '<Cmd>lua require"dap".toggle_breakpoint()<CR>',
-            { noremap = true, silent = true })
-        vim.api.nvim_set_keymap('n', '<F10>', '<Cmd>lua require"dap".step_over()<CR>', { noremap = true, silent = true })
-        vim.api.nvim_set_keymap('n', '<F11>', '<Cmd>lua require"dap".step_into()<CR>', { noremap = true, silent = true })
-        vim.api.nvim_set_keymap('n', '<S-F11>', '<Cmd>lua require"dap".step_out()<CR>', { noremap = true, silent = true })
-        vim.api.nvim_set_keymap('n', '<S-F5>', '<Cmd>lua require"dap".terminate()<CR>', { noremap = true, silent = true })
-        vim.api.nvim_set_keymap('n', '<Leader>tf', '<Cmd>lua require("dapui").float_element() <CR>',
-            { noremap = true, silent = true })
-
-        vim.api.nvim_set_keymap('n', '<Leader>tt', '<Cmd>lua require("dapui").toggle() <CR>',
-            { noremap = true, silent = true })
-
-        --#endregion
 
         --#region Show error on hold.
         local ns = vim.api.nvim_create_namespace("my_diagnostics_ns")
