@@ -1,9 +1,18 @@
 return {
     "neovim/nvim-lspconfig",
     dependencies = {
-        { "williamboman/mason.nvim" },
-        { "williamboman/mason-lspconfig.nvim" },
-        {"stevearc/conform.nvim",},
+        {
+            "williamboman/mason.nvim",
+            config = false
+        },
+        {
+            "williamboman/mason-lspconfig.nvim",
+            config = false
+        },
+        {
+            "stevearc/conform.nvim",
+            config = false
+        },
         {
             'saghen/blink.cmp',
             -- optional: provides snippets for the snippet source
@@ -160,35 +169,10 @@ return {
         {
             "kevinhwang91/nvim-ufo",
             dependencies = { "kevinhwang91/promise-async" },
-        },
-        {
-            "pmizio/typescript-tools.nvim",
-            dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+            config = false
         },
     },
     config = function()
-        --#region JS/TS Setup. ---------------------------------------------
-        require("typescript-tools").setup {
-            filetypes = {
-                "javascript",
-                "javascriptreact",
-                "javascript.jsx",
-                "typescript",
-                "typescriptreact",
-                "typescript.tsx",
-                "vue",
-            },
-            settings = {
-                tsserver_plugins = {
-                    "@vue/typescript-plugin",
-                },
-            },
-        }
-        --#endregion JS/TS Setup. ---------------------------------------------
-
-
-
-
         --#region common Lsp shortcut.
         require("conform").formatters.odinfmt = {
             inherit = false,
@@ -258,6 +242,7 @@ return {
         require('mason').setup {
             registries = {
                 "github:mason-org/mason-registry",
+                "github:Crashdummyy/mason-registry",
             },
         }
 
@@ -277,7 +262,7 @@ return {
         end
 
         require("mason-lspconfig").setup({
-            ensure_installed = { "clangd", "bashls", "neocmake", "lua_ls", "marksman", "typos_lsp", "harper_ls", "jsonls", "mesonlsp", "ts_ls"},
+            ensure_installed = { "clangd", "bashls", "neocmake", "lua_ls", "marksman", "typos_lsp", "harper_ls", "jsonls", "mesonlsp", "ts_ls" },
             automatic_enable = {
                 exclude = { "ts_ls" }
             }
@@ -363,11 +348,9 @@ return {
 
 
         require('ufo').setup()
-        --#endregion
 
 
 
-        --#region luasnip setup
         require('luasnip.loaders.from_vscode').lazy_load({ paths = vim.fn.stdpath('config') .. '/lsp_config/snippets' })
         require('luasnip.loaders.from_snipmate').lazy_load({ paths = vim.fn.stdpath('config') .. '/lsp_config/snippets' })
     end

@@ -114,6 +114,8 @@ return {
         { "<leader>sS",  function() Snacks.picker.lsp_workspace_symbols() end, desc = "LSP Workspace Symbols" },
         { "<leader>g",   function() Snacks.lazygit.open() end,                 desc = "Goto Implementation" },
     },
+    lazy = false,
+    priority = 1000,
     dependencies = {
         "nvim-lua/plenary.nvim",
     },
