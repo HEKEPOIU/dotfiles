@@ -16,6 +16,19 @@ return {
       -- to add ANSI escape code support, add:
       baleia_setup = true,
 
+      default_command = {
+        python = "python %",
+        lua = "lua %",
+        javascript = "node %",
+        typescript = "node %",
+        c = "clang -o %:r % && ./%:r",
+        cpp = "clang++ -std=c++23 -o %:r % && ./%:r",
+        java = "javac % && java %:r",
+        go = "go run %",
+        cs = "dotnet build",
+      },
+      bang_expansion = true,
+
       -- to make `:Compile` replace special characters (e.g. `%`) in
       -- the command (and behave more like `:!`), add:
       -- bang_expansion = true,
@@ -25,6 +38,13 @@ return {
           -- TypeScript errors take the form
           -- "path/to/error-file.ts(13,23): error TS22: etc."
           regex = "^\\(.\\+\\)(\\([1-9][0-9]*\\):\\([1-9][0-9]*\\)) Error",
+          filename = 1,
+          row = 2,
+          col = 3,
+        },
+        cs = {
+
+          regex = "^\\(.\\+\\)(\\([1-9][0-9]*\\),\\([1-9][0-9]*\\)): error",
           filename = 1,
           row = 2,
           col = 3,

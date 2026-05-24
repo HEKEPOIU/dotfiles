@@ -21,6 +21,28 @@ return {
             ["g."] = { "actions.toggle_hidden", mode = "n" },
             ["g\\"] = { "actions.toggle_trash", mode = "n" },
         },
+        view_options = {
+            show_hidden = false,
+            is_hidden_file = function(name, _)
+                if name:match("^%.") then
+                    return true
+                end
+
+                local godot_patterns = {
+                    '%.uid[/]?$',    -- .uid files
+                    '%.import[/]?$', -- .import files
+                    '^%.godot[/]?$', -- .godot directory
+                    '^%.mono[/]?$',  -- .mono directory
+                    'godot.*%.tmp$', -- godot temp files
+                }
+                for _, pat in ipairs(godot_patterns) do
+                    if name:match(pat) then
+                        return true
+                    end
+                end
+                return false
+            end,
+        },
     },
     dependencies = { { "nvim-mini/mini.icons", opts = {} } },
     -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.

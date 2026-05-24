@@ -41,9 +41,12 @@ return {
                 -- Instead of true it can also be a list of languages
                 additional_vim_regex_highlighting = false,
             },
+            indent = {
+                enable = true,
+            }
         }
         require 'nvim-treesitter'.install(
-            { "c", "lua", "vim", "vimdoc", "query", "vimdoc", "javascript", "c_sharp", "cpp", "odin" }
+            { "c", "lua", "vim", "vimdoc", "query", "vimdoc", "javascript", "cpp", "odin" }
         )
         local group = vim.api.nvim_create_augroup("TreesitterSetup", { clear = true })
 
