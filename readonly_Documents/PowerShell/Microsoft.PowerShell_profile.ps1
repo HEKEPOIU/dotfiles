@@ -36,7 +36,9 @@ Set-PSReadLineKeyHandler -Chord Ctrl+n -Function NextHistory
 Set-PSReadLineKeyHandler -Chord Ctrl+r -Function ReverseSearchHistory
 
 Set-PSReadLineOption -PredictionSource HistoryAndPlugin -PredictionViewStyle InlineView
-$env:Path += ";C:\Program Files\LLVM\bin;D:\raddebugger"
+
+# setting for llvm and debugger, uncomment it if need.
+# $env:Path += ";C:\Program Files\LLVM\bin;D:\raddebugger"
 
 Invoke-Expression (& { (zoxide init --cmd cd powershell | Out-String) })
 # goto Setting-> TIme& languagea -> language&region -> administavie language settings -> change system location -> check beta：use UTF-8 encoding option
