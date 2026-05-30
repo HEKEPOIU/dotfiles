@@ -6,4 +6,8 @@ If ($PSVersionTable.PSVersion.Major -Le 5 -Or $isWindows) {
     If (-Not (Test-Path $env:LOCALAPPDATA\lazygit)) {
         New-Item -Path $env:LOCALAPPDATA\lazygit -ItemType Junction -Value $env:USERPROFILE\.config\lazygit
     }
+
+    If (-Not (Test-Path $env:APPDATA\Zellij)) {
+        New-Item -Path $env:APPDATA\Zellij -ItemType Junction -Value $env:USERPROFILE\.config\Zellij
+    }
 }
