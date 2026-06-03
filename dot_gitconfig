@@ -1,0 +1,14 @@
+[init]
+	defaultBranch = main
+[core]
+	autocrlf = true
+[pull]
+	rebase = true
+
+[diff]
+	tool = nvimdiff
+[difftool "nvimdiff"]
+	cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
+
+[include]
+	path = "~/.config/delta_theme/delta_setting.gitconfig"
