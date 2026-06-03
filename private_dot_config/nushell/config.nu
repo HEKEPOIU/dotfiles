@@ -19,7 +19,16 @@
 
 source ./.zoxide.nu
 source ./.mise.nu
+source ./.fzf.nu
+
 oh-my-posh init nu --config ~/.config/sh_theme/spacesip.omp.json
 alias cat = bat
 source .carapace.nu
 $env.config.show_banner = false
+
+if $nu.os-info.family == "windows" {
+    source ./windows_config.nu
+}
+
+
+
