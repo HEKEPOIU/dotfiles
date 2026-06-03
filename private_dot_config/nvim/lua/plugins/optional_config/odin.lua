@@ -1,7 +1,7 @@
 ---@class LanguageModule
 return {
   ensure_installed = { "ols" },
-  enable = true,
+  enable = false,
   setup = function()
     require("conform").formatters.odinfmt = {
       inherit = false,

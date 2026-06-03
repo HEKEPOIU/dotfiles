@@ -14,7 +14,7 @@ vim.opt.rtp:prepend(lazypath)
 local spec = {
     { import = 'plugins' },
     -- { import = "plugins.optional" } -- enable all optional plugins
-    { import = "plugins.optional.roslyn" },
+    -- { import = "plugins.optional.roslyn" },
     -- { import = "plugins.optional.rest-kulala" },
     -- { import = "plugins.optional.typescript" },
 

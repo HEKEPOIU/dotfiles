@@ -1,7 +1,7 @@
 ---@class LanguageModule
 return {
   ensure_installed = { "clangd", "neocmake", "mesonlsp" },
-  enable = true,
+  enable = false,
   setup = function()
     local function get_clangd_cmd()
       local project_path = vim.fn.getcwd() -- Get the current project directory

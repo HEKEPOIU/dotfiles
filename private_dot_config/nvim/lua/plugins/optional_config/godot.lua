@@ -1,7 +1,7 @@
 ---@class LanguageModule
 return {
   ensure_installed = {},
-  enable = true,
+  enable = false,
   setup = function()
     local plat = "win"
 
