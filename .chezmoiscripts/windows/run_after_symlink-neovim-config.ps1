@@ -10,4 +10,9 @@ If ($PSVersionTable.PSVersion.Major -Le 5 -Or $isWindows) {
     If (-Not (Test-Path $env:APPDATA\Zellij)) {
         New-Item -Path $env:APPDATA\Zellij -ItemType Junction -Value $env:USERPROFILE\.config\Zellij
     }
+
+
+    If (-Not (Test-Path $env:APPDATA\nushell)) {
+        New-Item -Path $env:APPDATA\nushell -ItemType Junction -Value $env:USERPROFILE\.config\nushell
+    }
 }
