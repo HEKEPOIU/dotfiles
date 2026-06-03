@@ -131,9 +131,17 @@ return {
                         if success and node and vim.tbl_contains({ 'comment', 'line_comment', 'block_comment' }, node:type()) then
                             return { 'buffer' }
                         else
-                            return { 'lsp', 'path', 'snippets', 'buffer' }
+                            return { "lazydev", 'lsp', 'path', 'snippets', 'buffer' }
                         end
                     end,
+                    providers = {
+                        lazydev = {
+                            name = "LazyDev",
+                            module = "lazydev.integrations.blink",
+                            -- make lazydev completions top priority (see `:h blink.cmp`)
+                            score_offset = 100,
+                        },
+                    },
                 },
                 fuzzy = {
                     sorts = {
@@ -171,18 +179,20 @@ return {
             dependencies = { "kevinhwang91/promise-async" },
             config = false
         },
+        {
+            "folke/lazydev.nvim",
+            ft = "lua", -- only load on lua files
+            opts = {
+                library = {
+                    -- See the configuration section for more details
+                    -- Load luvit types when the `vim.uv` word is found
+                    { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+                },
+            },
+        },
     },
     config = function()
         --#region common Lsp shortcut.
-        require("conform").formatters.odinfmt = {
-            inherit = false,
-            command = "odinfmt",
-            args = { "-stdin" },
-            stdin = function()
-                local file_contents = vim.fn.readfile(vim.fn.expand('%'))
-                return table.concat(file_contents, "\n")
-            end,
-        }
         require("conform").setup({
             formatters_by_ft = {
                 lua = { lsp_format = "fallback" },
@@ -246,129 +256,36 @@ return {
             },
         }
 
-        local function get_clangd_cmd()
-            local project_path = vim.fn.getcwd() -- Get the current project directory
 
-            -- Define the paths for Mason and Xcode clangd
-            local mason_clangd = "clangd"
-            local xcode_clangd = "/usr/bin/clangd"
+        local ensure_list = { "marksman", "typos_lsp", "harper_ls", "jsonls" }
 
-            -- Define project-specific rules
-            if string.match(project_path, ".*XcodeProject.*") then
-                return xcode_clangd
-            else
-                return mason_clangd
+        local optional_modules = { "godot", "odin", "cpp", "bash", "ts" }
+
+        for _, mod in ipairs(optional_modules) do
+            ---@class LanguageModule
+            local module = require("plugins.optional_config." .. mod)
+            if module.enable == true then
+                vim.list_extend(ensure_list, module.ensure_installed)
+                module.setup()
             end
         end
 
         require("mason-lspconfig").setup({
-            ensure_installed = { "clangd", "bashls", "neocmake", "lua_ls", "marksman", "typos_lsp", "harper_ls", "jsonls", "mesonlsp", "ts_ls" },
+            ensure_installed = ensure_list,
             automatic_enable = {
                 exclude = { "ts_ls" }
             }
         })
-        vim.lsp.config.bashls = {
-            filetypes = { "sh", "bash", "zsh" },
-        }
         vim.lsp.config.harper_ls = {
             linters = {
                 SentenceCapitalization = false,
                 SpellCheck = false
             }
         }
-        vim.lsp.config.lua_ls = {
-            on_init = function(client)
-                if client.workspace_folders then
-                    local path = client.workspace_folders[1].name
-                    if path ~= vim.fn.stdpath('config') and (vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc')) then
-                        return
-                    end
-                end
 
-                client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
-                    runtime = {
-                        version = 'LuaJIT'
-                    },
-                    workspace = {
-                        checkThirdParty = false,
-                        library = {
-                            vim.env.VIMRUNTIME
-                        }
-                    }
-                })
-            end,
-            settings = {
-                Lua = {}
-            }
-        }
 
-        vim.lsp.config.clangd = {
-            capabilities = require('blink.cmp').get_lsp_capabilities({
-                offsetEncoding = { "utf-16" },
-            }),
-            cmd = {
-                get_clangd_cmd(),
-                "--background-index",
-                "--header-insertion-decorators",
-                "--header-insertion=never",
-                "--background-index-priority=normal",
-                "--enable-config",
-                "--clang-tidy",
-            },
-        }
-        local root = ""
-        vim.lsp.config.ols = {
-            root_dir = function(bufnr, on_dir)
-                local fname = vim.api.nvim_buf_get_name(bufnr)
-                if root == "" then
-                    root = require('lspconfig.util').root_pattern('ols.json', '.git')(fname)
-                end
-                on_dir(root)
-            end,
-        }
 
-        vim.filetype.add({
-            extension = {
-                hlsl = "hlsl",
-            }
-        })
-        if jit.os == "Windows" then
-            vim.lsp.config.shader_language_server = {
-                cmd = {
-                    vim.fn.stdpath('config') .. '/lsp_config/shader_lsp/shader-language-server.exe',
-                },
-                filetypes = { "glsl", "hlsl", "glslv", "glslf", "shader", "vert", "frag", "vs", "fs", "vert.glsl", "frag.glsl" },
-
-            }
-
-            vim.lsp.enable({
-                "shader_language_server",
-            })
-        end
-        local plat = "win"
-
-        if jit.os == "Linux" then
-            plat = "linux"
-        elseif jit.os == "OSX" then
-            plat = "macos"
-        end
-        local godot_node_path = vim.fn.stdpath('config') .. '/lsp_config/godot_nodepath_cs/godot-nodepath-' .. plat
-
-        if vim.loop.fs_stat(godot_node_path) then
-            vim.lsp.config.godot_node = {
-                cmd = {
-                    godot_node_path,
-                },
-                root_markers = { "project.godot" },
-                filetypes = { "cs" }
-            }
-            vim.lsp.enable({ "godot_node" })
-        else
-            vim.notify("godot-nodepath not found, please install it and put it into: " .. godot_node_path)
-        end
-
-        vim.lsp.enable({"gdscript"})
-
+        vim.lsp.enable({ "nushell" })
         require('ufo').setup()
 
 

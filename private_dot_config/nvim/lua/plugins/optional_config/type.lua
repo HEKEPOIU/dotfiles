@@ -1,0 +1,4 @@
+---@class LanguageModule
+---@field ensure_installed string[] Ensure isntall list for mason
+---@field enable boolean Enable or not, user need to config this to close something
+---@field setup function call it if enable
