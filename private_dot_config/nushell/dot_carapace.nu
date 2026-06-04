@@ -23,13 +23,12 @@ let carapace_completer = {|spans|
   | from json
 }
 
-mut current = (($env | default {} config).config | default {} completions)
-$current.completions = ($current.completions | default {} external)
-$current.completions.external = ($current.completions.external
-| default true enable
-# force overwrite completer to carapace
-| upsert completer { $carapace_completer })
-
-$env.config = $current
-    
+$env.config = {
+    completions: {
+        external: {
+            enable: true
+            completer: $carapace_completer
+        }
+    }
+}
 
