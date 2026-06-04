@@ -14,9 +14,9 @@ let carapace_completer = {|spans|
   # overwrite
   let spans = (if $expanded_alias != null  {
     # put the first word of the expanded alias first in the span
-    $spans | skip 1 | prepend ($expanded_alias | split row " " | take 1 | str replace --regex  '\.exe$' '')
+    $spans | skip 1 | prepend ($expanded_alias | split row " " | take 1 | str replace --regex  '\.(exe|sh|cmd|ps1|bat|com)$' '')
   } else {
-    $spans | skip 1 | prepend (($spans | first) | str replace --regex  '\.exe$' '')
+    $spans | skip 1 | prepend (($spans | first) | str replace --regex  '\.(exe|sh|cmd|ps1|bat|com)$' '')
   })
 
   carapace ($spans | first) nushell ...$spans

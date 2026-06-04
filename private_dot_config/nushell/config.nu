@@ -22,12 +22,20 @@ source ./.mise.nu
 source ./.fzf.nu
 
 alias cat = bat
-source .carapace.nu
+source ./.carapace.nu
 $env.config.show_banner = false
 
-if $nu.os-info.family == "windows" {
-    source ./windows_config.nu
+# See the doc: https://www.nushell.sh/blog/2023-09-19-nushell_0_85_0.html#improvements-to-parse-time-evaluation
+# the fuck.
+# tldr source only effect in statement 
+const WINDOWS_CONFIG = "./windows_config.nu"
+const UNIX_CONFIG = "./unix_config.nu"
+const ACTUAL_CONFIG = if $nu.os-info.family == "windows" {
+    $WINDOWS_CONFIG
+} else {  
+    $UNIX_CONFIG
 }
 
+source $ACTUAL_CONFIG
 
 
