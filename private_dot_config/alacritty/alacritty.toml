@@ -1,0 +1,20 @@
+[general]
+import = [ "./theme/tokyo-night.toml" ] # or tokyo-night-storm.toml
+[window]
+title = "Alacritty"
+dynamic_title = false
+
+[terminal]
+shell = {
+    program = "zellij"
+}
+
+[font]
+normal = {
+    family = "0xProto Nerd Font Mono"
+}
+
+[keyboard]
+bindings = [
+  { key = "Enter", mods = "Alt", action = "ReceiveChar" }
+]
