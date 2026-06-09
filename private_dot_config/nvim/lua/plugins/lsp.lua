@@ -16,11 +16,27 @@ return {
         {
             'saghen/blink.cmp',
             -- optional: provides snippets for the snippet source
-            dependencies = { 'rafamadriz/friendly-snippets' },
-
-            -- use a release tag to download pre-built binaries
-            version = '1.6.0',
-
+            dependencies = {
+                'saghen/blink.lib',
+                'rafamadriz/friendly-snippets',
+                {
+                    "folke/lazydev.nvim",
+                    ft = "lua", -- only load on lua files
+                    opts = {
+                        library = {
+                            -- See the configuration section for more details
+                            -- Load luvit types when the `vim.uv` word is found
+                            { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+                        },
+                    },
+                },
+            },
+            build = function()
+                -- build the fuzzy matcher, optionally add a timeout to `pwait(timeout_ms)`
+                -- you can use `gb` in `:Lazy` to rebuild the plugin as needed
+                -- require cargo
+                require('blink.cmp').build():pwait()
+            end,
             ---@module 'blink.cmp'
             ---@type blink.cmp.Config
             opts = {
@@ -179,17 +195,6 @@ return {
             dependencies = { "kevinhwang91/promise-async" },
             config = false
         },
-        {
-            "folke/lazydev.nvim",
-            ft = "lua", -- only load on lua files
-            opts = {
-                library = {
-                    -- See the configuration section for more details
-                    -- Load luvit types when the `vim.uv` word is found
-                    { path = "${3rd}/luv/library", words = { "vim%.uv" } },
-                },
-            },
-        },
     },
     config = function()
         --#region common Lsp shortcut.
@@ -212,7 +217,6 @@ return {
                 lsp_format = "fallback",
             },
         })
-
 
         vim.api.nvim_create_autocmd('LspAttach', {
             group = vim.api.nvim_create_augroup('user_lsp_attach', { clear = true }),
@@ -257,7 +261,7 @@ return {
         }
 
 
-        local ensure_list = { "marksman", "typos_lsp", "harper_ls", "jsonls" }
+        local ensure_list = { "marksman", "typos_lsp", "harper_ls", "jsonls", "lua_ls"}
 
         local optional_modules = { "godot", "odin", "cpp", "bash", "ts" }
 
