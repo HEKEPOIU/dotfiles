@@ -1,55 +1,26 @@
-local grep_directory = function()
-    local snacks = require("snacks")
-    local cwd = vim.fn.getcwd()
-
-    local function show_picker(dirs)
-        if #dirs == 0 then
-            vim.notify("No directories found", vim.log.levels.WARN)
-            return
-        end
-
-        local items = {}
-        for i, item in ipairs(dirs) do
-            table.insert(items, {
-                idx = i,
-                file = item,
-                text = item,
-            })
-        end
-
-        snacks.picker({
-            confirm = function(picker, item)
-                picker:close()
-                snacks.picker.grep({
-                    dirs = { item.file },
-                })
-            end,
-            items = items,
-            format = function(item, _)
-                local file = item.file
-                local ret = {}
-                local a = Snacks.picker.util.align
-                local icon, icon_hl = Snacks.util.icon(file.ft, "directory")
-                ret[#ret + 1] = { a(icon, 3), icon_hl }
-                ret[#ret + 1] = { " " }
-                local path = file:gsub("^" .. vim.pesc(cwd) .. "/", "")
-                ret[#ret + 1] = { a(path, 20), "Directory" }
-
-                return ret
-            end,
-            layout = {
-                preview = false,
-                preset = "vertical",
-            },
-            title = "Grep in directory",
-        })
+local fff_files_finder = function(opts, ctx)
+    local query = ctx.filter.search or ""
+    local ok, result = pcall(require('fff').file_search, query, { max_results = 100 })
+    if not ok or not result then return {} end
+    local items = {}
+    for _, item in ipairs(result.items or {}) do
+        items[#items + 1] = { text = item.relative_path, file = item.relative_path }
     end
-    local dirs = require("plenary.scandir").scan_dir(cwd, {
-        only_dirs = true,
-        respect_gitignore = false,
-    })
-    show_picker(dirs)
+    return items
 end
+
+local fff_grep_finder = function(opts, ctx)
+    local query = ctx.filter.search or ""
+    if query == "" then return {} end
+    local ok, result = pcall(require('fff').content_search, query, {mode = "regex" , page_size = 100, smart_case = true })
+    if not ok or not result then return {} end
+    local items = {}
+    for _, item in ipairs(result.items or {}) do
+        items[#items + 1] = { text = item.line_content, file = item.relative_path, pos = { item.line_number, item.col } }
+    end
+    return items
+end
+
 return {
     "folke/snacks.nvim",
     ---@type snacks.Config
@@ -77,6 +48,23 @@ return {
                 grep = {
                     layout = { preset = "ivy" },
                 },
+                fff_files = {
+                    finder = fff_files_finder,
+                    format = "file",
+                    live = true,
+                    supports_live = true,
+                    layout = { preset = "select" },
+                    matcher = { fuzzy = false, sort_empty = false },
+                },
+                fff_grep = {
+                    enabled = false,
+                    finder = fff_grep_finder,
+                    format = "file",
+                    live = true,
+                    supports_live = true,
+                    layout = { preset = "ivy" },
+                    matcher = { fuzzy = false, sort_empty = false },
+                },
 
             },
         },
@@ -100,11 +88,10 @@ return {
     },
     keys = {
         -- Top Pickers & Explorer
-        { "<leader>pg",  function() Snacks.picker.grep() end,                  desc = "Grep" },
         { "<leader>pb",  function() Snacks.picker.buffers() end,               desc = "Buffers" },
         { "<leader>ph",  function() Snacks.picker.git_files() end,             desc = "Find Git Files" },
-        { "<leader>pd",  grep_directory,                                       desc = "Find Dir File" },
-        { "<leader>pf",  function() Snacks.picker.files() end,                 desc = "Find Files" },
+        { "<leader>pf",  function() Snacks.picker("fff_files") end,             desc = "Find Git Files" },
+        { "<leader>pg",  function() Snacks.picker("fff_grep") end,             desc = "Find Git Files" },
 
         -- LSP
         { "gd",          function() Snacks.picker.lsp_definitions() end,       desc = "Goto Definition" },
@@ -118,5 +105,12 @@ return {
     priority = 1000,
     dependencies = {
         "nvim-lua/plenary.nvim",
+{
+  "dmtrKovalenko/fff.nvim",
+  build = function()
+    require("fff.download").download_or_build_binary()
+  end,
+  lazy = false,   -- make fff initialize on startup
+}
     },
 }
