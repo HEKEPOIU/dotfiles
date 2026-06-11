@@ -2,7 +2,7 @@ vim.g.mapleader = " "
 
 vim.opt.iskeyword:append("_")
 
-
+vim.keymap.set('ca', "w!!", "w !sudo tee %")
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move selected text down" })
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move selected text up" })
 
