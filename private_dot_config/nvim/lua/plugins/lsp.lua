@@ -199,11 +199,7 @@ return {
         }
 
 
-        local ensure_list = { "marksman", "typos_lsp", "harper_ls", "jsonls", "lua_ls" }
-
-        if vim.env.ssh_connection or vim.env.ssh_tty then
-            ensure_list = {}
-        end
+        local ensure_list = { }
 
         -- Maybe not manually add name in here
         local optional_modules = { "godot", "odin", "cpp", "bash", "dlang" }
