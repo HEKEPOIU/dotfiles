@@ -15,6 +15,9 @@ local spec = {
     { import = 'plugins' },
     -- { import = "plugins.optional" } -- enable all optional plugins
     -- { import = "plugins.optional.roslyn" },
+    -- { import = "plugins.optional.markdown" },
+    -- { import = "plugins.optional.render-markdown" },
+    -- { import = "plugins.optional.typst-preview" },
     -- { import = "plugins.optional.rest-kulala" },
     -- { import = "plugins.optional.typescript" },
 

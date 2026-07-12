@@ -1,5 +1,8 @@
 vim.g.mapleader = " "
 
+if vim.env.SSH_CONNECTION or vim.env.SSH_TTY then
+    vim.g.clipboard = "osc52"
+end
 vim.opt.iskeyword:append("_")
 
 vim.keymap.set('ca', "w!!", "w !sudo tee %")
