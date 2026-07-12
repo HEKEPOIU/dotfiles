@@ -1,7 +1,6 @@
 return {
   "ej-shafran/compile-mode.nvim",
-  version = "^5.0.0",
-  branch = "latest",
+  commit = "026b866dfb162313c3f1573f73daece6af0da3e3",
   dependencies = {
     "nvim-lua/plenary.nvim",
     { "m00qek/baleia.nvim", tag = "v1.3.0" },

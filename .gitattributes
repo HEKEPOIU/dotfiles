@@ -1,0 +1,9 @@
+# Keep repository text files platform-neutral and avoid line-ending-only diffs.
+* text=auto eol=lf
+
+# Windows-native script formats require CRLF when checked out on either platform.
+*.bat  text eol=crlf
+*.cmd  text eol=crlf
+*.ps1  text eol=crlf
+*.psm1 text eol=crlf
+*.psd1 text eol=crlf

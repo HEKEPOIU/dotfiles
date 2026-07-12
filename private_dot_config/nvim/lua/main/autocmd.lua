@@ -46,7 +46,6 @@ local ns = vim.api.nvim_create_namespace("my_diagnostics_ns")
 
 vim.diagnostic.config({
 	virtual_text = false,
-	underline = true,
 })
 
 vim.api.nvim_create_autocmd("CursorHold", {
@@ -68,10 +67,6 @@ vim.api.nvim_create_autocmd("CursorHold", {
 vim.api.nvim_create_autocmd("CursorMoved", {
 	callback = function()
 		vim.diagnostic.hide(ns)
-		vim.diagnostic.config({
-			virtual_text = false,
-			underline = true,
-		})
 	end,
 })
 --#endregion Show error on hold.
@@ -79,7 +74,6 @@ vim.api.nvim_create_autocmd("CursorMoved", {
 
 
 require("main.stateline")
-
 local statusline_group = vim.api.nvim_create_augroup("Statusline", { clear = true })
 
 vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter" }, {

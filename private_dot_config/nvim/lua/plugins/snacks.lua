@@ -1,25 +1,21 @@
-local fff_files_finder = function(opts, ctx)
-    local query = ctx.filter.search or ""
-    local ok, result = pcall(require('fff').file_search, query, { max_results = 100 })
-    if not ok or not result then return {} end
-    local items = {}
-    for _, item in ipairs(result.items or {}) do
-        items[#items + 1] = { text = item.relative_path, file = item.relative_path }
-    end
-    return items
-end
+vim.api.nvim_create_user_command("FindFile", function(opts)
+    local target_dir = opts.args ~= "" and vim.fn.expand(opts.args) or vim.fn.getcwd()
 
-local fff_grep_finder = function(opts, ctx)
-    local query = ctx.filter.search or ""
-    if query == "" then return {} end
-    local ok, result = pcall(require('fff').content_search, query, {mode = "regex" , page_size = 100, smart_case = true })
-    if not ok or not result then return {} end
-    local items = {}
-    for _, item in ipairs(result.items or {}) do
-        items[#items + 1] = { text = item.line_content, file = item.relative_path, pos = { item.line_number, item.col } }
-    end
-    return items
-end
+    require('fff').find_files_in_dir(target_dir)
+end, {
+    nargs = "?",
+    complete = "dir_in_path",
+})
+
+vim.api.nvim_create_user_command("GrepFile", function(opts)
+    local target_dir = opts.args ~= "" and vim.fn.expand(opts.args) or vim.fn.getcwd()
+    require('fff').live_grep({ cwd = target_dir, title = "FFF Grep: " .. vim.fn.fnamemodify(target_dir, ":t") })
+
+end, {
+    nargs = "?",
+    complete = "dir_in_path",
+})
+
 
 return {
     "folke/snacks.nvim",
@@ -28,44 +24,9 @@ return {
         lazygit = {},
         bigfile = {},
         picker = {
-            win = {
-                input = {
-                    keys = {
-                        ["<Tab>"] = { "list_down", mode = { "i", "n" } }, -- Tab 向下
-                        ["<S-Tab>"] = { "list_up", mode = { "i", "n" } }, -- Shift+Tab 向上
-                    }
-                }
-            },
             layout = {
                 cycle = true,
                 preset = "dropdown",
-            },
-            sources = {
-
-                files = {
-                    layout = { preset = "select" },
-                },
-                grep = {
-                    layout = { preset = "ivy" },
-                },
-                fff_files = {
-                    finder = fff_files_finder,
-                    format = "file",
-                    live = true,
-                    supports_live = true,
-                    layout = { preset = "select" },
-                    matcher = { fuzzy = false, sort_empty = false },
-                },
-                fff_grep = {
-                    enabled = false,
-                    finder = fff_grep_finder,
-                    format = "file",
-                    live = true,
-                    supports_live = true,
-                    layout = { preset = "ivy" },
-                    matcher = { fuzzy = false, sort_empty = false },
-                },
-
             },
         },
         explorer = {},
@@ -90,27 +51,63 @@ return {
         -- Top Pickers & Explorer
         { "<leader>pb",  function() Snacks.picker.buffers() end,               desc = "Buffers" },
         { "<leader>ph",  function() Snacks.picker.git_files() end,             desc = "Find Git Files" },
-        { "<leader>pf",  function() Snacks.picker("fff_files") end,             desc = "Find Git Files" },
-        { "<leader>pg",  function() Snacks.picker("fff_grep") end,             desc = "Find Git Files" },
 
         -- LSP
         { "gd",          function() Snacks.picker.lsp_definitions() end,       desc = "Goto Definition" },
-        { "gD",          function() Snacks.picker.lsp_declarations() end,      desc = "Goto Declaration" },
+        { "gri",          function() Snacks.picker.lsp_declarations() end,      desc = "Goto Declaration" },
         { "<leader>pr",  function() Snacks.picker.lsp_references() end,        nowait = true,                 desc = "References" },
-        { "<leader>psd", function() Snacks.picker.lsp_symbols() end,           desc = "LSP Symbols" },
-        { "<leader>sS",  function() Snacks.picker.lsp_workspace_symbols() end, desc = "LSP Workspace Symbols" },
+        { "gO", function() Snacks.picker.lsp_symbols() end,           desc = "LSP Symbols" },
         { "<leader>g",   function() Snacks.lazygit.open() end,                 desc = "Goto Implementation" },
     },
     lazy = false,
     priority = 1000,
     dependencies = {
         "nvim-lua/plenary.nvim",
-{
-  "dmtrKovalenko/fff.nvim",
-  build = function()
-    require("fff.download").download_or_build_binary()
-  end,
-  lazy = false,   -- make fff initialize on startup
-}
+        {
+            "dmtrKovalenko/fff.nvim",
+            build = function()
+                require("fff.download").download_or_build_binary()
+            end,
+            lazy = false, -- make fff initialize on startup
+            keys = {
+                { "<leader>pg", function() require('fff').live_grep() end,  desc = 'LiFFFe grep' },
+                { "<leader>pf", function() require('fff').find_files() end, desc = 'LiFFFe grep' },
+                {
+                    "<leader>pw",
+                    function() require('fff').live_grep_under_cursor() end,
+                    mode = { 'n', 'x' },
+                    desc = 'Search current word / selection',
+                },
+            },
+            opts = {
+                layout = {
+                    anchor = 'bottom',
+                    height = 0.4,
+                    width = 1,
+                    prompt_position = 'top',
+                },
+                keymaps = {
+                    close = '<Esc>',
+                    select = '<CR>',
+                    select_split = '<C-s>',
+                    select_vsplit = '<C-v>',
+                    select_tab = '<C-t>',
+                    move_up = { '<Up>', '<C-p>' },
+                    move_down = { '<Down>', '<C-n>' },
+                    preview_scroll_up = '<C-u>',
+                    preview_scroll_down = '<C-d>',
+                    toggle_debug = '<F2>',
+                    cycle_grep_modes = '<S-Tab>',
+                    -- grep mode only: jump cursor to first match of next/prev file group
+                    grep_jump_to_next_file = { '<C-A-n>', '<A-Down>' },
+                    grep_jump_to_prev_file = { '<C-A-p>', '<A-Up>' },
+                    cycle_previous_query = '<C-Up>',
+                    toggle_select = '<Tab>',
+                    send_to_quickfix = '<C-q>',
+                    focus_list = '<leader>l',
+                    focus_preview = '<leader>p',
+                },
+            }
+        }
     },
 }

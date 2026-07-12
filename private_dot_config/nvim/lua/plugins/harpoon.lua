@@ -17,10 +17,6 @@ return {
         vim.keymap.set('n', '<leader>hh', function() harpoon.ui:toggle_quick_menu(harpoon:list()) end,
             { desc = "Open harpoon windows", unpack(opts) })
 
-        vim.keymap.set('n', '<A-j>', function() harpoon:list():next() end,
-            { desc = "Go to next buffer", unpack(opts) })
-        vim.keymap.set('n', '<A-k>', function() harpoon:list():prev() end,
-            { desc = "Go to prev buffer", unpack(opts) })
         vim.keymap.set('n', 'g1', function() harpoon:list():select(1) end,
             { desc = "Go to buffer 1", unpack(opts) })
         vim.keymap.set('n', 'g2', function() harpoon:list():select(2) end,
