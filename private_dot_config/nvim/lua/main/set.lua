@@ -33,7 +33,5 @@ vim.opt.updatetime = 50
 
 vim.opt.exrc = true
 
-vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#A5475a", bg = "NONE" })
 vim.opt.splitright = true
 vim.o.maxmempattern = 8000000
-

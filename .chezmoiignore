@@ -3,13 +3,14 @@
 .bashrc
 .bash_profile
 .config/ghostty/**
-.config/zsh_theme/**
 {{- else }}
 Documents/**
 Documents/PowerShell/Microsoft.PowerShell_profile.ps1
 AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json
 .chezmoiscripts/windows/**
 .config/win_config_data/**
+.config/Zellij/**
+.config/alacritty/**
 {{- end }}
 
 {{- if ne .chezmoi.os "darwin" }}

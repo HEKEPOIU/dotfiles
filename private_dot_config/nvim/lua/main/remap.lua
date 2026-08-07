@@ -3,9 +3,10 @@ vim.g.mapleader = " "
 if vim.env.SSH_CONNECTION or vim.env.SSH_TTY then
     vim.g.clipboard = "osc52"
 end
-vim.opt.iskeyword:append("_")
 
+vim.opt.iskeyword:append("_")
 vim.keymap.set('ca', "w!!", "w !sudo tee %")
+
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move selected text down" })
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move selected text up" })
 
@@ -14,6 +15,7 @@ vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Scroll down and center" })
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Scroll up and center" })
 vim.keymap.set("n", "n", "nzzzv", { desc = "Next search result and center" })
 vim.keymap.set("n", "N", "Nzzzv", { desc = "Previous search result and center" })
+vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]])
 
 vim.keymap.set("x", "<leader>p", [["_dP]], { desc = "Paste and keep selection" })
 

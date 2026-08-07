@@ -91,7 +91,7 @@ return {
 
                         if node and vim.tbl_contains({ 'comment', 'line_comment', 'block_comment' }, node:type()) then
                             return { 'buffer', 'path' }
-                        -- kinda hack, seems odin treesitter return nil when insert in comment after space.
+                            -- kinda hack, seems odin treesitter return nil when insert in comment after space.
                         elseif vim.bo.filetype == "odin" and vim.startswith(line, "//") then
                             return { 'buffer', 'path' }
                         elseif vim.bo.filetype == "lua" then
@@ -110,6 +110,8 @@ return {
                     },
                 },
                 fuzzy = {
+                    -- some ssh session may failed download
+                    implementation = "prefer_rust",
                     sorts = {
                         'exact',
 
@@ -199,7 +201,7 @@ return {
         }
 
 
-        local ensure_list = { }
+        local ensure_list = {}
 
         -- Maybe not manually add name in here
         local optional_modules = { "godot", "odin", "cpp", "bash", "dlang" }

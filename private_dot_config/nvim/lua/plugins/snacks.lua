@@ -29,7 +29,6 @@ return {
                 preset = "dropdown",
             },
         },
-        explorer = {},
         indent = {},
         quickfile = {},
         rename = {

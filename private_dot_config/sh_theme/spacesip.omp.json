@@ -10,13 +10,13 @@
                         "style": "folder"
                     },
                     "style": "plain",
-                    "template": "<#ffffff>in</> {{ .Path }} ",
+                    "template": "<darkGray>in</> {{ .Path }} ",
                     "type": "path"
                 },
                 {
-                    "foreground": "#ff94df",
+                    "foreground": "lightMagenta",
                     "options": {
-                        "branch_icon": " <#ff94df><b>\ue0a0 </b></>",
+                        "branch_icon": " <lightMagenta><b>\ue0a0 </b></>",
                         "fetch_status": true,
                         "fetch_upstream_icon": true
                     },
@@ -31,13 +31,13 @@
             "alignment": "right",
             "segments": [
                 {
-                    "foreground": "#c4a000",
+                    "foreground": "yellow",
                     "style": "plain",
                     "template": " {{ .FormattedMs }} \uf252 ",
                     "type": "executiontime"
                 },
                 {
-                    "foreground": "#ff94df",
+                    "foreground": "lightMagenta",
                     "style": "plain",
                     "template": " {{ .CurrentDate | date .Format }} \uf017 ",
                     "type": "time"
